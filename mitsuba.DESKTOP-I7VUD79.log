@@ -1,0 +1,19 @@
+2021-03-05 17:00:24 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
+2021-03-05 17:00:24 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\path.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\difftrans.dll" ..
+2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 23): Unqueried attribute "reflectance" in element "bsdf"
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\roughdielectric.dll" ..
+2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 27): Unqueried attribute "reflectance" in element "bsdf"
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\plastic.dll" ..
+2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 31): Unqueried attribute "reflectance" in element "bsdf"
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
+2021-03-05 17:00:24 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-05 17:00:24 INFO  main [spectrum.cpp:601] "Cu.k.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 35): Unqueried attribute "reflectance" in element "bsdf"
+2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\directional.dll" ..
