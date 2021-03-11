@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+scene_xml = \
+'''<?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
 	<integrator type="path"/>
@@ -50,9 +51,10 @@
 
 
 	<shape type="obj">
-		<string name="filename" value="../data/small-set-norm/1a8d161d93764a8996cba1a88ab59678.obj"/>
-		<ref id="dielectric"/>
+		<string name="filename" value="%s"/>
+		<ref id="%s"/>
 	</shape>
 
 
 </scene>
+'''

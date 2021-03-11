@@ -1,0 +1,18 @@
+2021-03-11 15:00:39 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
+2021-03-11 15:00:39 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\path.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
+2021-03-11 15:00:39 WARN  main [BSDF] The BSDF
+SmoothDiffuse[
+  id = "diffuse",
+  reflectance = [10, 10, 10]
+]
+violates energy conservation! The parameter "reflectance" has a component-wise maximum of 10 (which is > 1!) and will therefore be scaled by 0.099 to prevent issues. Specify the parameter ensureEnergyConservation=false to the BSDF to prevent this from happening.
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\scale.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\roughdielectric.dll" ..
+2021-03-11 15:00:39 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
+2021-03-11 15:00:39 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
