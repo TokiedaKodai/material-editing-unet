@@ -29,12 +29,6 @@ def norm_obj(inFilePath, outFilePath):
     y_mean = np.mean(vertices[:, 1])
     z_mean = np.mean(vertices[:, 2])
     sd = np.sqrt(np.var(vertices))
-    # print(mean)
-    # print(x_mean)
-    # print(y_mean)
-    # print(z_mean)
-    # print(sd)
-    # print(vertices.shape)
     
     f_out = open(outFilePath, 'w')
     for line in open(inFilePath, "r"):
@@ -53,11 +47,10 @@ def norm_obj(inFilePath, outFilePath):
 
 if __name__ == "__main__":
     
-    inDir = '../data/small-set/'
-    outDir = '../data/small-set-norm/'
+    inDir = '../data/small-set-2/'
+    outDir = '../data/small-set-norm-2/'
 
     files = list(pathlib.Path(inDir).glob('*.obj'))
-    # files = ['1a0c94a2e3e67e4a2e4877b52b3fca7.obj']
     for fileName in files:
         fileName = fileName.name
         norm_obj(inDir + fileName, outDir + fileName)

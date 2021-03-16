@@ -13,15 +13,18 @@ scene_xml = scene.scene_xml
 
 res = 512
 
-inDir = config.data_dir + 'small-set-norm/'
-outDir = config.render_dir
+inDir = config.data_dir + 'small-set-norm-2/'
+outDir = config.render_dir + '210317/'
 outFile = config.render_file
 imgFile = outDir + 'img-%d-%s.png'
 
 list_bsdf = config.list_bsdf
 
+
 files = list(pathlib.Path(inDir).glob('*.obj'))
 for cnt, fileName in enumerate(files):
+	cnt += 100
+	
 	fileName = fileName.name
 	inFile = inDir + fileName
 

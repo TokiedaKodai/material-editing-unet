@@ -19,7 +19,7 @@ def build_unet_model(batch_shape,
     def encode_block(x, ch):
         def base_block(x):
             x = BatchNormalization()(x)
-            x = Activation('tanh')(x)
+            x = Activation('relu')(x)
             x = Dropout(rate=drop_rate)(x)
             x = Conv2D(ch, (3, 3), padding='same')(x)
             return x
@@ -32,7 +32,7 @@ def build_unet_model(batch_shape,
         ch = ch
         def base_block(x):
             x = BatchNormalization()(x)
-            x = Activation('tanh')(x)
+            x = Activation('relu')(x)
             x = Dropout(rate=drop_rate)(x)
             x = Conv2DTranspose(ch, (3, 3), padding='same')(x)
             return x
@@ -47,7 +47,7 @@ def build_unet_model(batch_shape,
     
     input_batch = Input(shape=(*batch_shape, ch_num))
     e0 = Conv2D(8, (1, 1), padding='same')(input_batch)
-    e0 = Activation('tanh')(e0)
+    e0 = Activation('relu')(e0)
 
     e0 = encode_block(e0, 16)
 

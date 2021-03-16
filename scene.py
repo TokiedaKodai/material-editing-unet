@@ -13,8 +13,9 @@ scene_xml = \
 
 
 	<bsdf type="diffuse" id="diffuse">
-        <spectrum name="reflectance" value="10"/>
+        <spectrum name="reflectance" value="1"/>
     </bsdf>
+
 
     <bsdf type="roughdielectric" id="dielectric">
         <string name="intIOR" value="water"/>
@@ -23,6 +24,14 @@ scene_xml = \
 
     <bsdf type="roughconductor" id="cu">
         <string name="material" value="Cu"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
+	<bsdf type="roughconductor" id="cu2o">
+        <string name="material" value="Cu2O"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
+	<bsdf type="roughconductor" id="cuo">
+        <string name="material" value="CuO"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
     <bsdf type="roughconductor" id="au">
