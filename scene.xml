@@ -59,7 +59,7 @@
 
 
 	<shape type="obj">
-		<string name="filename" value="../data/small-set-norm/1b9b6f1ddf363e0e8b424343280aeccb.obj"/>
+		<string name="filename" value="../data/small-set-norm-3/2c9b6f7add18d0b1e8791ddce75c6f81.obj"/>
 		<ref id="au"/>
 	</shape>
 

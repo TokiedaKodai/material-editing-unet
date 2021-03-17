@@ -47,8 +47,8 @@ def norm_obj(inFilePath, outFilePath):
 
 if __name__ == "__main__":
     
-    inDir = '../data/small-set-2/'
-    outDir = '../data/small-set-norm-2/'
+    inDir = '../data/small-set-3/'
+    outDir = '../data/small-set-norm-3/'
 
     files = list(pathlib.Path(inDir).glob('*.obj'))
     for fileName in files:
