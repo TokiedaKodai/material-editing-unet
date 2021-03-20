@@ -1,9 +1,11 @@
 import cv2
 import numpy as np
+import pandas as pd
 from itertools import product
 from tqdm import tqdm
 import sys
 import os
+import argparse
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import Sequence
@@ -14,39 +16,75 @@ import network
 import config as cf
 import tools
 
-argv = sys.argv
-_, model_name, epoch = argv
+''' argv
+model name
+epoch
+is model exist
+'''
 
-epoch = int(epoch)
-initial_epoch = 0
+# Parser
+parser = argparse.ArgumentParser()
+parser.add_argument('name', help='model name to use training and test')
+parser.add_argument('epoch', type=int, help='end epoch num')
+parser.add_argument('--exist', action='store_true', help='add, if pre-trained model exist')
+parser.add_argument('--min_train', action='store_true', help='add to re-train from min train loss')
+parser.add_argument('--min_val', action='store_true', help='add to re-train from min val loss')
+parser.add_argument('--batch', type=int, default=4, help='batch size')
+parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
+parser.add_argument('--drop', type=float, default=0.1, help='dropout rate')
+parser.add_argument('--val', type=float, default=0.3, help='validation data rate')
+parser.add_argument('--verbose', type=int, default=1, help='[0 - 2]: progress bar')
+args = parser.parse_args()
+
+# Model Parameters
+model_name = args.name
+epoch = args.epoch
+is_model_exist = args.exist
+is_load_min_train = args.min_train
+is_load_min_val = args.min_val
 
 data_dir = cf.render_dir + '210317/'
 img_file = data_dir + 'img-%d-%s.png'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
-log_file = cf.log_file
+log_file = model_dir + cf.log_file
+model_file = model_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 
 list_bsdf = cf.list_bsdf[:3]
 x_bsdf = list_bsdf[1:]
 y_bsdf = list_bsdf[0]
 
+# Data Parameters
 patch_size = 256
-# patch_size = 128
 patch_shape = (patch_size, patch_size)
 patch_tl = (0, 0)
 img_size = 512
 ch_num = 3
-batch_size = 4
-
 valid_rate = 0.1 # rate of valid pixels to add training patch
 valid_thre = 8 # threshold for valid pixel
 
-data_size = 400
-learning_rate = 0.001 # Default
-dropout_rate = 0.1
-val_rate = 0.3
-verbose = 1
+# Training Parameters
+data_size = 40
+batch_size = args.batch # Default 4
+learning_rate = args.lr # Default 0.001
+dropout_rate = args.drop # Default 0.1
+val_rate = args.val # Default 0.3
+verbose = args.verbose # Default 1
+
+init_epoch = 0
+if is_model_exist:
+    df_log = pd.read_csv(log_file)
+    end_point = int(df_log.tail(1).index.values) + 1
+    init_epoch = end_point
+    load_epoch = end_point
+    if is_load_min_val:
+        df_loss = df_log['val_loss']
+        load_epoch = df_loss.idxmin() + 1
+    elif is_load_min_train:
+        df_loss = df_log['loss']
+        load_epoch = df_loss.idxmin() + 1
+
 
 def loadImg(idx_range):
     def clipPatch(img):
@@ -105,19 +143,20 @@ def main():
     model_save_cb = ModelCheckpoint(save_dir + 'model-{epoch:04d}.hdf5',
                                     period=1,
                                     save_weights_only=True)
-    csv_logger_cb = CSVLogger(model_dir + log_file)
+    csv_logger_cb = CSVLogger(log_file)
+
+    if is_model_exist:
+        model.load_weights(model_file%load_epoch)
 
     x_train, y_train = loadImg(range(data_size))
     print('Training data size: ', len(x_train))
-    # print(x_train.shape)
-    # print(y_train.shape)
 
     model.fit(
             x_train,
             y_train,
             epochs=epoch,
             batch_size=batch_size,
-            initial_epoch=initial_epoch,
+            initial_epoch=init_epoch,
             shuffle=True,
             validation_split=val_rate,
             callbacks=[model_save_cb, csv_logger_cb],
