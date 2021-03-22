@@ -72,19 +72,6 @@ dropout_rate = args.drop # Default 0.1
 val_rate = args.val # Default 0.3
 verbose = args.verbose # Default 1
 
-init_epoch = 0
-if is_model_exist:
-    df_log = pd.read_csv(log_file)
-    end_point = int(df_log.tail(1).index.values) + 1
-    init_epoch = end_point
-    load_epoch = end_point
-    if is_load_min_val:
-        df_loss = df_log['val_loss']
-        load_epoch = df_loss.idxmin() + 1
-    elif is_load_min_train:
-        df_loss = df_log['loss']
-        load_epoch = df_loss.idxmin() + 1
-
 
 def loadImg(idx_range):
     def clipPatch(img):
@@ -132,6 +119,19 @@ def loadImg(idx_range):
     return np.array(x_data), np.array(y_data)
 
 def main():
+    init_epoch = 0
+    if is_model_exist:
+        df_log = pd.read_csv(log_file)
+        end_point = int(df_log.tail(1).index.values) + 1
+        init_epoch = end_point
+        load_epoch = end_point
+        if is_load_min_val:
+            df_loss = df_log['val_loss']
+            load_epoch = df_loss.idxmin() + 1
+        elif is_load_min_train:
+            df_loss = df_log['loss']
+            load_epoch = df_loss.idxmin() + 1
+
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(save_dir, exist_ok=True)
     model = network.build_unet_model(
