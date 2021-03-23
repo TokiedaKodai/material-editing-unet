@@ -2,28 +2,28 @@ import numpy as np
 import cv2
 import pathlib
 
-import config
+import config as cf
 import tools
 from tools import printexec
 import scene
 
-renderer = config.renderer
-scene_file = config.scene_file
+renderer = cf.renderer
+scene_file = cf.scene_file
 scene_xml = scene.scene_xml
 
 res = 512
 
-inDir = config.data_dir + 'small-set-norm-3/'
-outDir = config.render_dir + '210320/'
-outFile = config.render_file
+inDir = cf.data_dir + 'small-set-norm/'
+outDir = cf.render_dir + '210323/'
+outFile = cf.render_file
 imgFile = outDir + 'img-%d-%s.png'
 
-list_bsdf = config.list_bsdf
+list_bsdf = cf.list_bsdf
 
 
 files = list(pathlib.Path(inDir).glob('*.obj'))
 for cnt, fileName in enumerate(files):
-	cnt += 400
+	cnt += 0
 
 	fileName = fileName.name
 	inFile = inDir + fileName

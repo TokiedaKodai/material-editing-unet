@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
-	<integrator type="path"/>
+	<integrator type="pssmlt"/>
 
 	<sensor type="perspective">
 		<transform name="toWorld">
@@ -45,22 +45,19 @@
     <bsdf type="roughplastic" id="plastic"/>
 
 
-
 	<emitter type="directional">
 		<spectrum name="irradiance" value="2"/>
 		<vector name="direction" x="0.02" y="0" z="-1"/>
 	</emitter>
 
-	<!-- <emitter type="spot">
-		<transform name="toWorld">
-			<lookAt origin="-0.02, 0, 0" target="0, 0, -1"/>
-		</transform>
-	</emitter> -->
+
+
+
 
 
 	<shape type="obj">
-		<string name="filename" value="../data/small-set-norm-3/2c9b6f7add18d0b1e8791ddce75c6f81.obj"/>
-		<ref id="au"/>
+		<string name="filename" value="../data/small-set-norm/1a0312faac503f7dc2c1a442b53fa053.obj"/>
+		<ref id="diffuse"/>
 	</shape>
 
 

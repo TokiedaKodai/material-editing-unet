@@ -6,7 +6,7 @@ scene_xml = \
 
 	<sensor type="perspective">
 		<transform name="toWorld">
-			<lookAt origin="0, 0, 5" target="0, 0, 0" up="0, 1, 0"/>
+			<lookAt origin="0, 0, 500" target="0, 0, 0" up="0, 1, 0"/>
 		</transform>
 	</sensor>
 
@@ -52,11 +52,7 @@ scene_xml = \
 		<vector name="direction" x="0.02" y="0" z="-1"/>
 	</emitter>
 
-	<!-- <emitter type="spot">
-		<transform name="toWorld">
-			<lookAt origin="-0.02, 0, 0" target="0, 0, -1"/>
-		</transform>
-	</emitter> -->
+
 
 
 	<shape type="obj">
@@ -66,4 +62,30 @@ scene_xml = \
 
 
 </scene>
+'''
+
+'''
+	<emitter type="directional">
+		<spectrum name="irradiance" value="2"/>
+		<vector name="direction" x="0.02" y="0" z="-1"/>
+	</emitter>
+
+	<emitter type="spot">
+		<transform name="toWorld">
+			<lookAt origin="-0.1, 0, 5" target="0, 0, 0"/>
+		</transform>
+        <spectrum name="intensity" value="30"/>
+        <float name="cutoffAngle" value="45"/>
+	</emitter>
+
+	<emitter type="envmap" id="Area_002-light">
+		<string name="filename" value="envmap.exr"/>
+		<transform name="toWorld">
+			<rotate y="1" angle="-180"/>
+			<matrix value="-0.224951 -0.000001 -0.974370 0.000000 -0.974370 0.000000 0.224951 0.000000 0.000000 1.000000 -0.000001 8.870000 0.000000 0.000000 0.000000 1.000000 "/>
+		</transform>
+		<float name="scale" value="3"/>
+	</emitter>
+
+
 '''

@@ -38,7 +38,7 @@ def norm_obj(inFilePath, outFilePath):
             v = vals[1:4]
             v = np.array(v, dtype=float)
             v = [v[0] - x_mean, v[1] - y_mean, v[2] - z_mean] / sd
-            # v *= 100
+            v *= 100
             vStr = "v %s %s %s\n"%(v[0], v[1], v[2])
             f_out.write(vStr)
         else:
@@ -47,8 +47,8 @@ def norm_obj(inFilePath, outFilePath):
 
 if __name__ == "__main__":
     
-    inDir = '../data/small-set-3/'
-    outDir = '../data/small-set-norm-3/'
+    inDir = '../data/small-set/'
+    outDir = '../data/small-set-norm/'
 
     files = list(pathlib.Path(inDir).glob('*.obj'))
     for fileName in files:
