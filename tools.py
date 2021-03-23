@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 from subprocess import call
 import pathlib
 
@@ -38,12 +39,16 @@ def norm_obj(inFilePath, outFilePath):
             v = vals[1:4]
             v = np.array(v, dtype=float)
             v = [v[0] - x_mean, v[1] - y_mean, v[2] - z_mean] / sd
-            v *= 100
+            # v *= 100
             vStr = "v %s %s %s\n"%(v[0], v[1], v[2])
             f_out.write(vStr)
         else:
             f_out.write(line)
     f_out.close()
+
+def tonemap(img, gamma=2.2):
+    tm = cv2.createTonemapDurand(gamma=gamma)
+    
 
 if __name__ == "__main__":
     
