@@ -2,50 +2,68 @@ scene_xml = \
 '''<?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
-	<integrator type="photonmapper">
-        <integer name="directSamples" value="32"/>
-        <integer name="glossySamples" value="512"/>
+	<integrator type="path">
     </integrator>
 
 	<sensor type="perspective">
 		<transform name="toWorld">
 			<lookAt origin="0, 0, 5" target="0, 0, 0" up="0, 1, 0"/>
 		</transform>
+
+		<sampler type="independent">
+			<integer name="sampleCount" value="1024"/>
+		</sampler>
+
+		<film type="hdrfilm">
+			<integer name="width" value="512"/>
+			<integer name="height" value="512"/>
+			<boolean name="banner" value="false"/>
+		</film>
 	</sensor>
 
 
 
-	<bsdf type="diffuse" id="diffuse">
+	<bsdf type="twosided" id="diffuse">
+	<bsdf type="diffuse">
         <spectrum name="reflectance" value="1"/>
     </bsdf>
+	</bsdf>
 
-    <bsdf type="roughconductor" id="cu">
+    <bsdf type="twosided" id="cu">
+	<bsdf type="roughconductor">
         <string name="material" value="Cu"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
-	<bsdf type="roughconductor" id="cu2o">
+	</bsdf>
+	<bsdf type="twosided" id="cu2o">
+	<bsdf type="roughconductor">
         <string name="material" value="Cu2O"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
+	</bsdf>
 	<bsdf type="roughconductor" id="cuo">
         <string name="material" value="CuO"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
-    <bsdf type="roughconductor" id="au">
+    <bsdf type="twosided" id="au">
+	<bsdf type="roughconductor">
         <string name="material" value="Au"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
+	</bsdf>
     <bsdf type="roughconductor" id="carbon">
         <string name="material" value="a-C"/>
         <float name="alpha" value="0.2"/>
     </bsdf>
 
-    <bsdf type="roughplastic" id="plastic"/>
-
+    <bsdf type="twosided" id="plastic">
+	<bsdf type="roughplastic"/>
+	</bsdf>
 
 	<shape type="obj">
 		<string name="filename" value="%s"/>
 		<ref id="%s"/>
+		<boolean name="collapse" value="true"/>
 	</shape>
 
 
@@ -59,6 +77,12 @@ scene_xml = \
 '''
 
 '''
+	<integrator type="photonmapper">
+        <integer name="directSamples" value="32"/>
+        <integer name="glossySamples" value="512"/>
+    </integrator>
+
+
 	<emitter type="directional">
 		<spectrum name="irradiance" value="2"/>
 		<vector name="direction" x="0.02" y="0" z="-1"/>
@@ -89,8 +113,32 @@ scene_xml = \
 		<float name="scale" value="3"/>
 	</emitter>
 
+
+
+	<bsdf type="diffuse" id="diffuse">
+        <spectrum name="reflectance" value="1"/>
+    </bsdf>
+
+    <bsdf type="roughconductor" id="cu">
+        <string name="material" value="Cu"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
+	<bsdf type="roughconductor" id="cu2o">
+        <string name="material" value="Cu2O"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
+	<bsdf type="roughconductor" id="cuo">
+        <string name="material" value="CuO"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
     <bsdf type="roughconductor" id="au">
         <string name="material" value="Au"/>
         <float name="alpha" value="0.3"/>
     </bsdf>
+    <bsdf type="roughconductor" id="carbon">
+        <string name="material" value="a-C"/>
+        <float name="alpha" value="0.2"/>
+    </bsdf>
+
+    <bsdf type="roughplastic" id="plastic"/>
 '''

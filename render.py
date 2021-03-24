@@ -14,7 +14,7 @@ scene_xml = scene.scene_xml
 res = 512
 
 inDir = cf.data_dir + 'small-set-norm/'
-outDir = cf.render_dir + '210323/'
+outDir = cf.render_dir + '210324/'
 outFile = cf.render_file
 imgFile = outDir + 'img-%d-%s.png'
 

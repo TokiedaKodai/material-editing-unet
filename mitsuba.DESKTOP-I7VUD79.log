@@ -1,19 +1,35 @@
-2021-03-05 17:00:24 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
-2021-03-05 17:00:24 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\path.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\difftrans.dll" ..
-2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 23): Unqueried attribute "reflectance" in element "bsdf"
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\roughdielectric.dll" ..
-2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 27): Unqueried attribute "reflectance" in element "bsdf"
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\plastic.dll" ..
-2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 31): Unqueried attribute "reflectance" in element "bsdf"
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
-2021-03-05 17:00:24 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
-2021-03-05 17:00:24 INFO  main [spectrum.cpp:601] "Cu.k.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
-2021-03-05 17:00:24 WARN  main [scenehandler.cpp:795] In file "C:\Users\b19.tokieda\Desktop\material_editing\material-editing-unet\scene.xml" (near line 35): Unqueried attribute "reflectance" in element "bsdf"
-2021-03-05 17:00:24 INFO  main [PluginManager] Loading plugin "plugins\directional.dll" ..
+2021-03-24 17:28:28 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
+2021-03-24 17:28:28 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\path.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\twosided.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Cu.k.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Cu2O.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Cu2O.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "CuO.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "CuO.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Au.eta.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "Au.k.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "a-C.eta.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
+2021-03-24 17:28:28 INFO  main [spectrum.cpp:601] "a-C.k.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\roughplastic.dll" ..
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\obj.dll" ..
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] Loading geometry from "1a03376343b2e4f0c27d3c9a6f742a5e.obj" ..
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e: 10 triangles, 20 vertices (merged 10 vertices).
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_0: 2 triangles, 4 vertices (merged 2 vertices).
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_1: 8 triangles, 16 vertices (merged 8 vertices).
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_2: 792 triangles, 2376 vertices (merged 0 vertices).
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_3: 28 triangles, 34 vertices (merged 50 vertices).
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_4: 94 triangles, 104 vertices (merged 178 vertices).
+2021-03-24 17:28:28 WARN  main [WavefrontOBJ] Could not find referenced material library '1a03376343b2e4f0c27d3c9a6f742a5e.mtl'
+2021-03-24 17:28:28 INFO  main [WavefrontOBJ] Done with "1a03376343b2e4f0c27d3c9a6f742a5e.obj" (took 151 ms)
+2021-03-24 17:28:28 INFO  main [PluginManager] Loading plugin "plugins\directional.dll" ..
+2021-03-24 17:28:28 INFO  ren0 [KDTreeBase] Constructing a SAH kd-tree (934 primitives) ..
+2021-03-24 17:28:28 INFO  ren0 [KDTreeBase] Finished -- took 3 ms.
+2021-03-24 17:28:28 INFO  ren0 [SamplingIntegrator] Starting render job (512x512, 1024 samples, 8 cores, SSE2 enabled) ..

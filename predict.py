@@ -69,10 +69,12 @@ def main():
         for i in range(4):
             ori_img = x_test[i][:, :, ::-1]
             pred_img = pred[i][:, :, ::-1]
-            max_lumi = np.max(pred[i])
-            if max_lumi > 255:
-                pred_img = (pred_img / max_lumi)
-                pred_img = pred_img.astype('int') * 255
+            # max_lumi = np.max(pred[i])
+            # if max_lumi > 255:
+            #     pred_img = (pred_img / max_lumi)
+            #     pred_img = pred_img.astype('int') * 255
+            pred_img = tools.tonemap(pred_img)
+
             axs[0, i].imshow(ori_img)
             axs[1, i].imshow(pred_img)
             axs[0, i].set_title(x_bsdf[i])
