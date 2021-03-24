@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
-	<integrator type="pssmlt"/>
+	<integrator type="photonmapper">
+        <integer name="directSamples" value="32"/>
+        <integer name="glossySamples" value="512"/>
+    </integrator>
 
 	<sensor type="perspective">
 		<transform name="toWorld">
@@ -13,12 +16,6 @@
 
 	<bsdf type="diffuse" id="diffuse">
         <spectrum name="reflectance" value="1"/>
-    </bsdf>
-
-
-    <bsdf type="roughdielectric" id="dielectric">
-        <string name="intIOR" value="water"/>
-        <string name="extIOR" value="air"/>
     </bsdf>
 
     <bsdf type="roughconductor" id="cu">
@@ -45,20 +42,16 @@
     <bsdf type="roughplastic" id="plastic"/>
 
 
+	<shape type="obj">
+		<string name="filename" value="../data/small-set-norm/1a03376343b2e4f0c27d3c9a6f742a5e.obj"/>
+		<ref id="cu2o"/>
+	</shape>
+
+
 	<emitter type="directional">
-		<spectrum name="irradiance" value="2"/>
+		<spectrum name="irradiance" value="100"/>
 		<vector name="direction" x="0.02" y="0" z="-1"/>
 	</emitter>
-
-
-
-
-
-
-	<shape type="obj">
-		<string name="filename" value="../data/small-set-norm/1a0312faac503f7dc2c1a442b53fa053.obj"/>
-		<ref id="diffuse"/>
-	</shape>
 
 
 </scene>

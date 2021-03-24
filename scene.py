@@ -2,11 +2,14 @@ scene_xml = \
 '''<?xml version="1.0" encoding="utf-8"?>
 
 <scene version="0.5.0">
-	<integrator type="path"/>
+	<integrator type="photonmapper">
+        <integer name="directSamples" value="32"/>
+        <integer name="glossySamples" value="512"/>
+    </integrator>
 
 	<sensor type="perspective">
 		<transform name="toWorld">
-			<lookAt origin="0, 0, 500" target="0, 0, 0" up="0, 1, 0"/>
+			<lookAt origin="0, 0, 5" target="0, 0, 0" up="0, 1, 0"/>
 		</transform>
 	</sensor>
 
@@ -14,12 +17,6 @@ scene_xml = \
 
 	<bsdf type="diffuse" id="diffuse">
         <spectrum name="reflectance" value="1"/>
-    </bsdf>
-
-
-    <bsdf type="roughdielectric" id="dielectric">
-        <string name="intIOR" value="water"/>
-        <string name="extIOR" value="air"/>
     </bsdf>
 
     <bsdf type="roughconductor" id="cu">
@@ -46,19 +43,16 @@ scene_xml = \
     <bsdf type="roughplastic" id="plastic"/>
 
 
-
-	<emitter type="directional">
-		<spectrum name="irradiance" value="2"/>
-		<vector name="direction" x="0.02" y="0" z="-1"/>
-	</emitter>
-
-
-
-
 	<shape type="obj">
 		<string name="filename" value="%s"/>
 		<ref id="%s"/>
 	</shape>
+
+
+	<emitter type="directional">
+		<spectrum name="irradiance" value="100"/>
+		<vector name="direction" x="0.02" y="0" z="-1"/>
+	</emitter>
 
 
 </scene>
@@ -78,6 +72,14 @@ scene_xml = \
         <float name="cutoffAngle" value="45"/>
 	</emitter>
 
+    <shape type="sphere">
+        <point name="center" x="-0.2" y="0" z="5"/>
+        <float name="radius" value="0.1"/>
+        <emitter type="area">
+            <spectrum name="radiance" value="2000"/>
+        </emitter>
+    </shape>
+
 	<emitter type="envmap" id="Area_002-light">
 		<string name="filename" value="envmap.exr"/>
 		<transform name="toWorld">
@@ -87,5 +89,8 @@ scene_xml = \
 		<float name="scale" value="3"/>
 	</emitter>
 
-
+    <bsdf type="roughconductor" id="au">
+        <string name="material" value="Au"/>
+        <float name="alpha" value="0.3"/>
+    </bsdf>
 '''

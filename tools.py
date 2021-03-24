@@ -47,8 +47,9 @@ def norm_obj(inFilePath, outFilePath):
     f_out.close()
 
 def tonemap(img, gamma=2.2):
-    tm = cv2.createTonemapDurand(gamma=gamma)
-    
+    tm = cv2.createTonemap(gamma=gamma)
+    img_tm = tm.process(img)
+    return np.clip(img_tm*255, 0, 255).astype('uint8')
 
 if __name__ == "__main__":
     
