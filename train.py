@@ -36,6 +36,8 @@ parser.add_argument('--val', type=float, default=0.3, help='validation data rate
 parser.add_argument('--verbose', type=int, default=1, help='[0 - 2]: progress bar')
 args = parser.parse_args()
 
+print(args)
+
 # Model Parameters
 model_name = args.name
 epoch = args.epoch
@@ -43,8 +45,8 @@ is_model_exist = args.exist
 is_load_min_train = args.min_train
 is_load_min_val = args.min_val
 
-data_dir = cf.render_dir + '210317/'
-img_file = data_dir + 'img-%d-%s.png'
+data_dir = cf.render_dir + '210324/exr/'
+img_file = data_dir + 'img-%d-%s.exr'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = model_dir + cf.log_file
@@ -52,7 +54,7 @@ model_file = model_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 
 list_bsdf = cf.list_bsdf[:3]
-x_bsdf = list_bsdf[1:]
+x_bsdf = list_bsdf
 y_bsdf = list_bsdf[0]
 
 # Data Parameters
@@ -61,17 +63,18 @@ patch_shape = (patch_size, patch_size)
 patch_tl = (0, 0)
 img_size = 512
 ch_num = 3
-valid_rate = 0.1 # rate of valid pixels to add training patch
-valid_thre = 8 # threshold for valid pixel
+valid_rate = 0.05 # rate of valid pixels to add training patch
+valid_thre = 8 / 255 # threshold for valid pixel
 
 # Training Parameters
-data_size = 40
+data_size = 400
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
 dropout_rate = args.drop # Default 0.1
 val_rate = args.val # Default 0.3
 verbose = args.verbose # Default 1
 
+scaling = 1
 
 def loadImg(idx_range):
     def clipPatch(img):
@@ -103,12 +106,17 @@ def loadImg(idx_range):
     y_data = []
 
     for idx in tqdm(idx_range):
-        y_img = cv2.imread(img_file%(idx, y_bsdf), 1)
+        y_img = cv2.imread(img_file%(idx, y_bsdf), -1)
+        max_val = np.max(y_img)
+        if not max_val == 0:
+            y_img /= max_val
         y_patches = clipPatch(y_img)
         _, valids = selectValidPatch(y_patches)
         
         for bsdf in x_bsdf:
-            x_img = cv2.imread(img_file%(idx, bsdf), 1)
+            x_img = cv2.imread(img_file%(idx, bsdf), -1)
+            if not max_val == 0:
+                x_img /= max_val
             x_patches = clipPatch(x_img)
 
             for i, is_valid in enumerate(valids):
@@ -150,6 +158,9 @@ def main():
 
     x_train, y_train = loadImg(range(data_size))
     print('Training data size: ', len(x_train))
+
+    x_train *= scaling
+    y_train *= scaling
 
     model.fit(
             x_train,

@@ -9,6 +9,7 @@ import matplotlib.colors as colors
 from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.cm import ScalarMappable
+from skimage.measure import compare_ssim, compare_psnr
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import Sequence
@@ -22,8 +23,8 @@ import tools
 argv = sys.argv
 _, model_name = argv
 
-data_dir = cf.render_dir + '210317/'
-img_file = data_dir + 'img-%d-%s.png'
+data_dir = cf.render_dir + '210324/exr/'
+img_file = data_dir + 'img-%d-%s.exr'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = cf.log_file
@@ -43,7 +44,16 @@ img_shape = (img_size, img_size)
 ch_num = 3
 
 idx_range = range(400, 500)
-idx_range = range(100)
+# idx_range = range(100)
+
+def mse(img1, img2):
+    return np.sum(np.square(img1 - img2))
+
+def measure(func, **kwargs):
+    return func(kwargs['x'], kwargs['x'])
+
+def evaluate(x, y):
+    
 
 def main():
     os.makedirs(out_dir, exist_ok=True)
@@ -53,13 +63,15 @@ def main():
     model.load_weights(model_final)
 
     for idx in tqdm(idx_range):
-    # for idx in idx_range:
-        y_test = cv2.imread(img_file%(idx, y_bsdf), 1)
-        
         x_test = []
         for bsdf in x_bsdf:
-            x_img = cv2.imread(img_file%(idx, bsdf), 1)
+            x_img = cv2.imread(img_file%(idx, bsdf), -1)
+            max_val = np.max(x_img)
+            if not max_val == 0:
+                x_img /= max_val
             x_test.append(x_img)
+
+        y_test = x_test[0]
             
         pred = model.predict(np.array(x_test), batch_size=len(x_bsdf))
         pred = pred.astype('int')
@@ -69,10 +81,7 @@ def main():
         for i in range(4):
             ori_img = x_test[i][:, :, ::-1]
             pred_img = pred[i][:, :, ::-1]
-            # max_lumi = np.max(pred[i])
-            # if max_lumi > 255:
-            #     pred_img = (pred_img / max_lumi)
-            #     pred_img = pred_img.astype('int') * 255
+
             pred_img = tools.tonemap(pred_img)
 
             axs[0, i].imshow(ori_img)

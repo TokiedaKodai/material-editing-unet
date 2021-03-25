@@ -1,35 +1,33 @@
-2021-03-24 09:24:19 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
-2021-03-24 09:24:19 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\photonmapper.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Cu.k.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Cu2O.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Cu2O.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "CuO.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "CuO.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Au.eta.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "Au.k.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "a-C.eta.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
-2021-03-24 09:24:19 INFO  main [spectrum.cpp:601] "a-C.k.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\roughplastic.dll" ..
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\obj.dll" ..
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] Loading geometry from "1a03376343b2e4f0c27d3c9a6f742a5e.obj" ..
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] box hedge in plant pot: 10 triangles, 20 vertices (merged 10 vertices).
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e: 2 triangles, 4 vertices (merged 2 vertices).
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_0: 8 triangles, 16 vertices (merged 8 vertices).
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_1: 792 triangles, 2376 vertices (merged 0 vertices).
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_2: 28 triangles, 34 vertices (merged 50 vertices).
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] 1a03376343b2e4f0c27d3c9a6f742a5e_3: 94 triangles, 104 vertices (merged 178 vertices).
-2021-03-24 09:24:19 WARN  main [WavefrontOBJ] Could not find referenced material library '1a03376343b2e4f0c27d3c9a6f742a5e.mtl'
-2021-03-24 09:24:19 INFO  main [WavefrontOBJ] Done with "1a03376343b2e4f0c27d3c9a6f742a5e.obj" (took 120 ms)
-2021-03-24 09:24:19 INFO  main [PluginManager] Loading plugin "plugins\directional.dll" ..
-2021-03-24 09:24:19 INFO  ren0 [KDTreeBase] Constructing a SAH kd-tree (934 primitives) ..
-2021-03-24 09:24:19 INFO  ren0 [KDTreeBase] Finished -- took 2 ms.
-2021-03-24 09:24:19 INFO  ren0 [PluginManager] Loading plugin "plugins\halton.dll" ..
-2021-03-24 09:24:20 INFO  ren0 [SamplingIntegrator] Starting render job (768x576, 4 samples, 16 cores, SSE2 enabled) ..
+2021-03-25 10:05:01 INFO  main [mitsuba.cpp:256] Mitsuba version 0.5.0 (Windows, 64 bit), Copyright (c) 2014 Wenzel Jakob
+2021-03-25 10:05:01 INFO  main [mitsuba.cpp:356] Parsing scene description from "scene.xml" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\path.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\independent.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\hdrfilm.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\gaussian.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\perspective.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\diffuse.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\twosided.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\roughconductor.dll" ..
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Cu.eta.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Cu.k.spd": loaded a spectral power distribution with 55 entries (between 302.400421 and 885.601257 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Cu2O.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Cu2O.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "CuO.eta.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "CuO.k.spd": loaded a spectral power distribution with 12 entries (between 350.028015 and 899.709961 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Au.eta.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "Au.k.spd": loaded a spectral power distribution with 56 entries (between 298.757050 and 885.601257 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "a-C.eta.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
+2021-03-25 10:05:01 INFO  main [spectrum.cpp:601] "a-C.k.spd": loaded a spectral power distribution with 14 entries (between 309.950012 and 885.570984 nm)
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\roughplastic.dll" ..
+2021-03-25 10:05:01 INFO  main [PluginManager] Loading plugin "plugins\obj.dll" ..
+2021-03-25 10:05:01 INFO  main [WavefrontOBJ] Loading geometry from "2c74a038c7b8a30c641aac62064f7645.obj" ..
+2021-03-25 10:05:03 INFO  main [WavefrontOBJ] 2c74a038c7b8a30c641aac62064f7645: 6099 triangles, 6355 vertices (merged 11942 vertices).
+2021-03-25 10:05:03 INFO  main [WavefrontOBJ] 2c74a038c7b8a30c641aac62064f7645_0: 7326 triangles, 7580 vertices (merged 14398 vertices).
+2021-03-25 10:05:03 INFO  main [WavefrontOBJ] 2c74a038c7b8a30c641aac62064f7645_1: 1731 triangles, 1729 vertices (merged 3464 vertices).
+2021-03-25 10:05:03 INFO  main [WavefrontOBJ] 2c74a038c7b8a30c641aac62064f7645_2: 656 triangles, 1210 vertices (merged 758 vertices).
+2021-03-25 10:05:03 WARN  main [WavefrontOBJ] Could not find referenced material library '2c74a038c7b8a30c641aac62064f7645.mtl'
+2021-03-25 10:05:03 INFO  main [WavefrontOBJ] Done with "2c74a038c7b8a30c641aac62064f7645.obj" (took 1678 ms)
+2021-03-25 10:05:03 INFO  main [PluginManager] Loading plugin "plugins\directional.dll" ..
+2021-03-25 10:05:03 INFO  ren0 [KDTreeBase] Constructing a SAH kd-tree (15812 primitives) ..
+2021-03-25 10:05:03 INFO  ren0 [KDTreeBase] Finished -- took 155 ms.
+2021-03-25 10:05:03 INFO  ren0 [SamplingIntegrator] Starting render job (512x512, 1024 samples, 16 cores, SSE2 enabled) ..

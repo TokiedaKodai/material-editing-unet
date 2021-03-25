@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import pathlib
+import shutil
 
 import config as cf
 import tools
@@ -13,17 +14,18 @@ scene_xml = scene.scene_xml
 
 res = 512
 
-inDir = cf.data_dir + 'small-set-norm/'
+inDir = cf.data_dir + 'small-set-norm-3/'
 outDir = cf.render_dir + '210324/'
 outFile = cf.render_file
-imgFile = outDir + 'img-%d-%s.png'
+imgFile = outDir + 'png/img-%d-%s.png'
+exrFile = outDir + 'exr/img-%d-%s.exr'
 
 list_bsdf = cf.list_bsdf
 
 
 files = list(pathlib.Path(inDir).glob('*.obj'))
 for cnt, fileName in enumerate(files):
-	cnt += 0
+	cnt += 400
 
 	fileName = fileName.name
 	inFile = inDir + fileName
@@ -35,8 +37,10 @@ for cnt, fileName in enumerate(files):
 
 		exe_param = '-o ' + outFile + ' ' + scene_file
 		printexec(renderer, exe_param)
+
+		shutil.copy(outFile, exrFile%(cnt, bsdf))
 		
 		img = cv2.imread(outFile, -1)
 		img = img[:res, :res, :]
-		img = tools.tonemap(img)
-		cv2.imwrite(imgFile%(cnt, bsdf), img)
+		# img = tools.tonemap(img)
+		cv2.imwrite(imgFile%(cnt, bsdf), img*255)
