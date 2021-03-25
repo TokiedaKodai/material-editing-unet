@@ -53,7 +53,10 @@ def measure(func, **kwargs):
     return func(kwargs['x'], kwargs['x'])
 
 def evaluate(x, y):
-    
+    vals = []
+    for f in [mse, compare_ssim, compare_psnr]:
+        vals.append(measure(f, x=x, y=y))
+    return vals
 
 def main():
     os.makedirs(out_dir, exist_ok=True)
@@ -61,6 +64,8 @@ def main():
 
     model = network.build_unet_model(img_shape, ch_num)
     model.load_weights(model_final)
+
+    str_results = 'idx,bsdf,mse,ssim,psnr\n'
 
     for idx in tqdm(idx_range):
         x_test = []
@@ -74,6 +79,11 @@ def main():
         y_test = x_test[0]
             
         pred = model.predict(np.array(x_test), batch_size=len(x_bsdf))
+
+        for i, bsdf in enumerate(x_bsdf):
+            results = evaluate(pred[i], y_test)
+            str_results += '{},{},{}\n'.format(idx, bsdf, results)
+
         pred = pred.astype('int')
         x_test = np.array(x_test, dtype='int')
 
@@ -92,6 +102,9 @@ def main():
 
         plt.savefig(pred_dir + 'pred-{:04d}.png'.format(idx), dpi=300)
         plt.close()
+    
+    with open(pred_dir + 'results.txt', mode='w') as f:
+        f.write(str_results)
 
 if __name__ == "__main__":
     main()
