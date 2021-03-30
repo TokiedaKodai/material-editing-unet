@@ -113,7 +113,7 @@ def loadImg(idx_range):
             y_img = y_img[:, :, ::-1]
             y_img = tools.tonemap_exr(y_img)
             y_img = np.nan_to_num(y_img)
-        max_val = np.max(y_img)
+        # max_val = np.max(y_img)
         # print('{}: {}, {}'.format(idx, max_val, np.min(y_img)))
         # print(y_img)
         # if not max_val == 0:

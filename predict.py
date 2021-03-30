@@ -45,6 +45,8 @@ img_size = 512
 img_shape = (img_size, img_size)
 ch_num = 3
 
+is_tonemap = True
+
 idx_range = range(400, 500)
 # idx_range = range(100)
 
@@ -92,9 +94,13 @@ def main():
         x_test = []
         for bsdf in x_bsdf:
             x_img = cv2.imread(img_file%(idx, bsdf), -1)
-            max_val = np.max(x_img)
-            if not max_val == 0:
-                x_img /= max_val
+            if is_tonemap:
+                x_img = x_img[:, :, ::-1]
+                x_img = tools.tonemap_exr(x_img)
+                x_img = np.nan_to_num(x_img)
+            # max_val = np.max(x_img)
+            # if not max_val == 0:
+            #     x_img /= max_val
             x_test.append(x_img)
 
         y_test = x_test[0]
@@ -110,12 +116,18 @@ def main():
 
         fig, axs = plt.subplots(2, 4, figsize=(15, 10))
         for i in range(4):
-            ori_img = x_test[i][:, :, ::-1]
-            pred_img = pred[i][:, :, ::-1]
+            # ori_img = x_test[i][:, :, ::-1]
+            # pred_img = pred[i][:, :, ::-1]
+            ori_img = x_test[i]
+            pred_img = pred[i]
 
             # ori_img = x_test[i]
-            ori_img = tools.tonemap(ori_img)
+            # ori_img = tools.tonemap(ori_img)
             # pred_img = pred[i]
+            # pred_img = tools.tonemap(pred_img)
+
+            ori_img = tools.exr2png(ori_img)
+            # pred_img = tools.exr2png(pred_img)
             pred_img = tools.tonemap(pred_img)
 
             # pred_img = pred[i][:, :, ::-1]

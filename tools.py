@@ -53,6 +53,9 @@ def tonemap(img, gamma=2.2):
 def tonemap_exr(img, gamma=2.2):
     tm = cv2.createTonemap(gamma=gamma)
     return tm.process(img)
+
+def exr2png(img):
+    return np.clip(img*255, 0, 255).astype('uint8')
     
 
 if __name__ == "__main__":
