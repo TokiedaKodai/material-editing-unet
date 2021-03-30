@@ -38,19 +38,21 @@ list_bsdf = cf.list_bsdf[:4]
 x_bsdf = list_bsdf
 y_bsdf = list_bsdf[0]
 
-patch_size = 256
-patch_shape = (patch_size, patch_size)
+
 patch_tl = (0, 0)
 img_size = 512
 img_shape = (img_size, img_size)
 ch_num = 3
+valid_thre = 8 / 255
 
 is_tonemap = True
 
-idx_range = range(400, 500)
-idx_range = range(100)
+# idx_range = range(400, 500)
+idx_range = list(range(100))
+idx_range.extend(list(range(400, 500)))
 
 is_load_min_val = True
+is_load_min_val = False
 is_load_min_train = False
 
 def rmse(img1, img2):
@@ -104,6 +106,8 @@ def main():
             x_test.append(x_img)
 
         y_test = x_test[0]
+        mask = y_test[:, :, 0] > valid_thre
+        mask = np.dstack([mask, mask, mask]).astype('float32')
             
         pred = model.predict(np.array(x_test), batch_size=len(x_bsdf))
 
@@ -119,7 +123,7 @@ def main():
             # ori_img = x_test[i][:, :, ::-1]
             # pred_img = pred[i][:, :, ::-1]
             ori_img = x_test[i]
-            pred_img = pred[i]
+            pred_img = pred[i] * mask
 
             # ori_img = x_test[i]
             # ori_img = tools.tonemap(ori_img)

@@ -59,6 +59,7 @@ y_bsdf = list_bsdf[0]
 
 # Data Parameters
 patch_size = 256
+# patch_size = 128
 patch_shape = (patch_size, patch_size)
 patch_tl = (0, 0)
 img_size = 512
@@ -95,7 +96,8 @@ def loadImg(idx_range):
         new_list = []
         list_valid = []
         for patch in list_patch:
-            mask = patch[:, :, 0] > valid_thre
+            # mask = patch[:, :, 0] > valid_thre
+            mask = patch[:, :, 3]
             if np.sum(mask) > patch_size**2 * valid_rate:
                 new_list.append(patch)
                 list_valid.append(1)
@@ -118,6 +120,10 @@ def loadImg(idx_range):
         # print(y_img)
         # if not max_val == 0:
         #     y_img /= max_val
+
+        mask = y_img[:, :, 0] > valid_thre
+        y_img = np.dstack([y_img, mask, mask, mask])
+
         y_patches = clipPatch(y_img)
         _, valids = selectValidPatch(y_patches)
         

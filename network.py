@@ -44,6 +44,15 @@ def build_unet_model(batch_shape,
         x = base_block(x)
         x = base_block(x)
         return x
+
+    def mean_squared_error_masked(y_true, y_pred):
+        gt = y_true[:, :, :, :3]
+        mask = y_true[:, :, :, 3:]
+
+        mask = K.cast(mask, 'float32')
+        length = K.sum(mask)
+        mse = K.sum(K.square(gt - y_pred) * mask) / length
+        return mse
     
     input_batch = Input(shape=(*batch_shape, ch_num))
     e0 = Conv2D(8, (1, 1), padding='same')(input_batch)
@@ -86,6 +95,7 @@ def build_unet_model(batch_shape,
                 optimizer=adam,
                 metrics=['accuracy'],
                 # loss='mean_squared_error'
-                loss='mean_absolute_error'
+                # loss='mean_absolute_error'
+                loss=mean_squared_error_masked
                 )
     return model
