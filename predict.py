@@ -48,10 +48,10 @@ ch_num = 3
 is_tonemap = True
 
 idx_range = range(400, 500)
-# idx_range = range(100)
+idx_range = range(100)
 
-is_load_min_val = False
-is_load_min_train = True
+is_load_min_val = True
+is_load_min_train = False
 
 def rmse(img1, img2):
     return np.sqrt(np.sum(np.square(img1 - img2)))

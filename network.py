@@ -85,7 +85,7 @@ def build_unet_model(batch_shape,
                 # optimizer='adam',
                 optimizer=adam,
                 metrics=['accuracy'],
-                loss='mean_squared_error'
-                # loss='mean_absolute_error'
+                # loss='mean_squared_error'
+                loss='mean_absolute_error'
                 )
     return model
