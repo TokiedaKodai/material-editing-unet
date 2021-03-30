@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import pandas as pd
 from itertools import product
 from tqdm import tqdm
 import sys
@@ -27,7 +28,8 @@ data_dir = cf.render_dir + '210324/exr/'
 img_file = data_dir + 'img-%d-%s.exr'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
-log_file = cf.log_file
+log_file = model_dir + cf.log_file
+model_file = save_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 out_dir = cf.result_dir + model_name + '/'
 pred_dir = out_dir + 'pred/'
@@ -46,26 +48,45 @@ ch_num = 3
 idx_range = range(400, 500)
 # idx_range = range(100)
 
-def mse(img1, img2):
-    return np.sum(np.square(img1 - img2))
+is_load_min_val = False
+is_load_min_train = True
+
+def rmse(img1, img2):
+    return np.sqrt(np.sum(np.square(img1 - img2)))
+
+def mae(img1, img2):
+    return (np.sum(np.abs(img1 - img2)))
 
 def measure(func, **kwargs):
     return func(kwargs['x'], kwargs['x'])
 
 def evaluate(x, y):
     vals = []
-    for f in [mse, compare_ssim, compare_psnr]:
-        vals.append(measure(f, x=x, y=y))
+    vals.append(measure(mae, x=x, y=y))
+    vals.append(measure(rmse, x=x, y=y))
+    vals.append(compare_ssim(X=x, Y=y, multichannel=True))
+    # vals.append(compare_psnr(x, y))
     return vals
 
 def main():
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(pred_dir, exist_ok=True)
 
-    model = network.build_unet_model(img_shape, ch_num)
-    model.load_weights(model_final)
+    df_log = pd.read_csv(log_file)
+    end_point = int(df_log.tail(1).index.values) + 1
+    load_epoch = end_point
+    if is_load_min_val:
+        df_loss = df_log['val_loss']
+        load_epoch = df_loss.idxmin() + 1
+    elif is_load_min_train:
+        df_loss = df_log['loss']
+        load_epoch = df_loss.idxmin() + 1
 
-    str_results = 'idx,bsdf,mse,ssim,psnr\n'
+    model = network.build_unet_model(img_shape, ch_num)
+    # model.load_weights(model_final)
+    model.load_weights(model_file%load_epoch)
+
+    str_results = 'idx,bsdf,mae,rmse,ssim\n'
 
     for idx in tqdm(idx_range):
         x_test = []
@@ -82,17 +103,33 @@ def main():
 
         for i, bsdf in enumerate(x_bsdf):
             results = evaluate(pred[i], y_test)
-            str_results += '{},{},{}\n'.format(idx, bsdf, results)
+            str_results += '{},{},{},{},{}\n'.format(idx, bsdf, results[0], results[1], results[2])
 
-        pred = pred.astype('int')
-        x_test = np.array(x_test, dtype='int')
+        # pred = pred.astype('int')
+        # x_test = np.array(x_test, dtype='int')
 
         fig, axs = plt.subplots(2, 4, figsize=(15, 10))
         for i in range(4):
             ori_img = x_test[i][:, :, ::-1]
             pred_img = pred[i][:, :, ::-1]
 
+            # ori_img = x_test[i]
+            ori_img = tools.tonemap(ori_img)
+            # pred_img = pred[i]
             pred_img = tools.tonemap(pred_img)
+
+            # pred_img = pred[i][:, :, ::-1]
+            # max_pred = np.max(pred_img)
+            # if not max_pred == 0:
+            #     pred_img = pred_img / max_pred
+            # pred_img *= 255
+            # pred_img = pred_img.astype('int')
+
+            # max_ori = np.max(ori_img)
+            # if not max_ori == 0:
+            #     ori_img = ori_img / max_ori
+            # ori_img *= 255
+            # ori_img = ori_img.astype('int')
 
             axs[0, i].imshow(ori_img)
             axs[1, i].imshow(pred_img)

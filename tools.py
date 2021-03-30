@@ -50,6 +50,11 @@ def tonemap(img, gamma=2.2):
     img_tm = tm.process(img)
     return np.clip(img_tm*255, 0, 255).astype('uint8')
 
+def tonemap_exr(img, gamma=2.2):
+    tm = cv2.createTonemap(gamma=gamma)
+    return tm.process(img)
+    
+
 if __name__ == "__main__":
     
     inDir = '../data/small-set/'

@@ -42,5 +42,5 @@ for cnt, fileName in enumerate(files):
 		
 		img = cv2.imread(outFile, -1)
 		img = img[:res, :res, :]
-		# img = tools.tonemap(img)
-		cv2.imwrite(imgFile%(cnt, bsdf), img*255)
+		img = tools.tonemap(img)
+		cv2.imwrite(imgFile%(cnt, bsdf), img)
