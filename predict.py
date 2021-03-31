@@ -24,8 +24,10 @@ import tools
 argv = sys.argv
 _, model_name = argv
 
-data_dir = cf.render_dir + '210324/exr/'
-img_file = data_dir + 'img-%d-%s.exr'
+# data_dir = cf.render_dir + '210324/exr/'
+data_dir = cf.render_dir + '210317/'
+# img_file = data_dir + 'img-%d-%s.exr'
+img_file = data_dir + 'img-%d-%s.png'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = model_dir + cf.log_file
@@ -46,6 +48,7 @@ ch_num = 3
 valid_thre = 8 / 255
 
 is_tonemap = True
+is_tonemap = False
 
 # idx_range = range(400, 500)
 idx_range = list(range(100))
@@ -120,32 +123,40 @@ def main():
 
         fig, axs = plt.subplots(2, 4, figsize=(15, 10))
         for i in range(4):
-            # ori_img = x_test[i][:, :, ::-1]
+            ori_img = x_test[i][:, :, ::-1]
             # pred_img = pred[i][:, :, ::-1]
-            ori_img = x_test[i]
-            pred_img = pred[i] * mask
+            # ori_img = x_test[i]
+            # pred_img = pred[i] * mask
 
             # ori_img = x_test[i]
             # ori_img = tools.tonemap(ori_img)
             # pred_img = pred[i]
             # pred_img = tools.tonemap(pred_img)
 
-            ori_img = tools.exr2png(ori_img)
+            # pred_img = tools.tonemap_exr(pred_img)
+            # length = np.sum(mask)
+            # if not length == 0:
+            #     mean_diffuse = np.sum(ori_img * mask) / length
+            #     mean_pred = np.sum(pred_img * mask) / length
+            #     pred_img = (pred_img / mean_pred) * mean_diffuse
+
+            # ori_img = tools.exr2png(ori_img)
             # pred_img = tools.exr2png(pred_img)
-            pred_img = tools.tonemap(pred_img)
+            
+            # pred_img = tools.tonemap(pred_img)
 
-            # pred_img = pred[i][:, :, ::-1]
-            # max_pred = np.max(pred_img)
-            # if not max_pred == 0:
-            #     pred_img = pred_img / max_pred
-            # pred_img *= 255
-            # pred_img = pred_img.astype('int')
+            pred_img = pred[i][:, :, ::-1]
+            max_pred = np.max(pred_img)
+            if not max_pred == 0:
+                pred_img = pred_img / max_pred
+            pred_img *= 255
+            pred_img = pred_img.astype('int')
 
-            # max_ori = np.max(ori_img)
-            # if not max_ori == 0:
-            #     ori_img = ori_img / max_ori
-            # ori_img *= 255
-            # ori_img = ori_img.astype('int')
+            max_ori = np.max(ori_img)
+            if not max_ori == 0:
+                ori_img = ori_img / max_ori
+            ori_img *= 255
+            ori_img = ori_img.astype('int')
 
             axs[0, i].imshow(ori_img)
             axs[1, i].imshow(pred_img)

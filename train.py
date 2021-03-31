@@ -46,8 +46,10 @@ is_model_exist = args.exist
 is_load_min_train = args.min_train
 is_load_min_val = args.min_val
 
-data_dir = cf.render_dir + '210324/exr/'
-img_file = data_dir + 'img-%d-%s.exr'
+# data_dir = cf.render_dir + '210324/exr/'
+data_dir = cf.render_dir + '210317/'
+# img_file = data_dir + 'img-%d-%s.exr'
+img_file = data_dir + 'img-%d-%s.png'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = model_dir + cf.log_file
@@ -55,7 +57,7 @@ model_file = save_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 
 list_bsdf = cf.list_bsdf[:3]
-x_bsdf = list_bsdf
+x_bsdf = list_bsdf[1:]
 y_bsdf = list_bsdf[0]
 
 # Data Parameters
@@ -67,6 +69,7 @@ img_size = 512
 ch_num = 3
 valid_rate = 0.05 # rate of valid pixels to add training patch
 valid_thre = 8 / 255 # threshold for valid pixel
+valid_thre = 8
 
 # Training Parameters
 data_size = 400
@@ -78,6 +81,7 @@ verbose = args.verbose # Default 1
 
 scaling = 1
 is_tonemap = True
+is_tonemap = False
 
 # Augmentation
 is_aug = args.aug
