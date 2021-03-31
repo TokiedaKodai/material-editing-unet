@@ -32,6 +32,7 @@ parser.add_argument('--min_val', action='store_true', help='add to re-train from
 parser.add_argument('--batch', type=int, default=16, help='batch size')
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--drop', type=float, default=0.1, help='dropout rate')
+parser.add_argument('--aug', action='store_true', help='add to use data augmentation')
 parser.add_argument('--val', type=float, default=0.3, help='validation data rate')
 parser.add_argument('--verbose', type=int, default=1, help='[0 - 2]: progress bar')
 args = parser.parse_args()
@@ -77,6 +78,26 @@ verbose = args.verbose # Default 1
 
 scaling = 1
 is_tonemap = True
+
+# Augmentation
+is_aug = args.aug
+augment_rate = 1
+shift_max = 0.2
+
+if is_aug:
+    datagen_args = dict(
+                        width_shift_range=shift_max,
+                        height_shift_range=shift_max,
+                        shear_range=0,
+                        fill_mode='constant',
+                        cval=0,
+                        )
+    x_datagen = ImageDataGenerator(**datagen_args)
+    y_datagen = ImageDataGenerator(**datagen_args)
+    x_val_datagen = ImageDataGenerator()
+    y_val_datagen = ImageDataGenerator()
+    seed_train = 1
+    seed_val = 2
 
 def loadImg(idx_range):
     def clipPatch(img):
@@ -169,27 +190,52 @@ def main():
     model_save_cb = ModelCheckpoint(save_dir + 'model-{epoch:04d}.hdf5',
                                     period=1,
                                     save_weights_only=True)
-    csv_logger_cb = CSVLogger(log_file)
+    csv_logger_cb = CSVLogger(log_file, append=is_model_exist)
 
     if is_model_exist:
         model.load_weights(model_file%load_epoch)
 
-    x_train, y_train = loadImg(range(data_size))
-    print('Training data size: ', len(x_train))
+    x_data, y_data = loadImg(range(data_size))
+    print('Training data size: ', len(x_data))
 
-    x_train *= scaling
-    y_train *= scaling
+    if is_aug:
+        print('data augmentation')
+        x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, 
+                                                        test_size=val_rate, shuffle=True)
+        x_datagen.fit(x_train, augment=True, seed=seed_train)
+        y_datagen.fit(y_train, augment=True, seed=seed_train)
+        x_val_datagen.fit(x_val, augment=True, seed=seed_val)
+        y_val_datagen.fit(y_val, augment=True, seed=seed_val)
 
-    model.fit(
-            x_train,
-            y_train,
-            epochs=epoch,
-            batch_size=batch_size,
-            initial_epoch=init_epoch,
-            shuffle=True,
-            validation_split=val_rate,
-            callbacks=[model_save_cb, csv_logger_cb],
-            verbose=verbose)
+        x_generator = x_datagen.flow(x_train, batch_size=batch_size, seed=seed_train)
+        y_generator = y_datagen.flow(y_train, batch_size=batch_size, seed=seed_train)
+        x_val_generator = x_val_datagen.flow(x_val, batch_size=batch_size, seed=seed_val)
+        y_val_generator = y_val_datagen.flow(y_val, batch_size=batch_size, seed=seed_val)
+
+        train_generator = zip(x_generator, y_generator)
+        val_generator = zip(x_val_generator, y_val_generator)
+
+        model.fit_generator(
+                train_generator,
+                steps_per_epoch=len(x_train)*augment_rate / batch_size + 1,
+                epochs=epoch,
+                initial_epoch=init_epoch,
+                shuffle=True,
+                callbacks=[model_save_cb, csv_logger_cb],
+                validation_data=val_generator,
+                validation_steps=len(x_val)*augment_rate / batch_size + 1,
+                verbose=verbose)
+    else:
+        model.fit(
+                x_data,
+                y_data,
+                epochs=epoch,
+                batch_size=batch_size,
+                initial_epoch=init_epoch,
+                shuffle=True,
+                validation_split=val_rate,
+                callbacks=[model_save_cb, csv_logger_cb],
+                verbose=verbose)
 
     model.save_weights(model_final)
 
