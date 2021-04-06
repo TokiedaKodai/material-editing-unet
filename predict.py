@@ -11,6 +11,7 @@ from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib.cm import ScalarMappable
 from skimage.measure import compare_ssim, compare_psnr
+import argparse
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import Sequence
@@ -21,20 +22,35 @@ import network
 import config as cf
 import tools
 
-argv = sys.argv
-_, model_name = argv
+# Parser
+parser = argparse.ArgumentParser()
+parser.add_argument('name', help='model name to use training and test')
+parser.add_argument('epoch', help='end epoch num')
+parser.add_argument('--pred_str', default=None, help='add string to predict folder')
+args = parser.parse_args()
 
-# data_dir = cf.render_dir + '210324/exr/'
-data_dir = cf.render_dir + '210317/'
-# img_file = data_dir + 'img-%d-%s.exr'
-img_file = data_dir + 'img-%d-%s.png'
+print(args)
+
+# Model Parameters
+model_name = args.name
+epoch = args.epoch
+pred_str = args.pred_str
+
+data_dir = cf.render_dir + '210324/exr/'
+# data_dir = cf.render_dir + '210317/'
+img_file = data_dir + 'img-%d-%s.exr'
+# img_file = data_dir + 'img-%d-%s.png'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = model_dir + cf.log_file
 model_file = save_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 out_dir = cf.result_dir + model_name + '/'
-pred_dir = out_dir + 'pred/'
+
+pred_dir = out_dir + 'pred-%s'%epoch
+if not pred_str is None:
+    pred_dir += '-' + pred_str
+pred_dir += '/'
 
 list_bsdf = cf.list_bsdf[:4]
 x_bsdf = list_bsdf
@@ -48,14 +64,15 @@ ch_num = 3
 valid_thre = 8 / 255
 
 is_tonemap = True
-is_tonemap = False
+# is_tonemap = False
 
 # idx_range = range(400, 500)
 idx_range = list(range(100))
-idx_range.extend(list(range(400, 500)))
+# idx_range.extend(list(range(400, 500)))
 
 is_load_min_val = True
 is_load_min_val = False
+is_load_min_train = True
 is_load_min_train = False
 
 def rmse(img1, img2):
@@ -123,14 +140,15 @@ def main():
 
         fig, axs = plt.subplots(2, 4, figsize=(15, 10))
         for i in range(4):
-            ori_img = x_test[i][:, :, ::-1]
+            # ori_img = x_test[i][:, :, ::-1]
             # pred_img = pred[i][:, :, ::-1]
-            # ori_img = x_test[i]
-            # pred_img = pred[i] * mask
+            ori_img = x_test[i]
+            pred_img = pred[i]
+            pred_img *= mask
 
             # ori_img = x_test[i]
-            # ori_img = tools.tonemap(ori_img)
             # pred_img = pred[i]
+            # ori_img = tools.tonemap(ori_img)
             # pred_img = tools.tonemap(pred_img)
 
             # pred_img = tools.tonemap_exr(pred_img)
@@ -140,23 +158,23 @@ def main():
             #     mean_pred = np.sum(pred_img * mask) / length
             #     pred_img = (pred_img / mean_pred) * mean_diffuse
 
-            # ori_img = tools.exr2png(ori_img)
-            # pred_img = tools.exr2png(pred_img)
+            ori_img = tools.exr2png(ori_img)
+            pred_img = tools.exr2png(pred_img)
             
             # pred_img = tools.tonemap(pred_img)
 
-            pred_img = pred[i][:, :, ::-1]
-            max_pred = np.max(pred_img)
-            if not max_pred == 0:
-                pred_img = pred_img / max_pred
-            pred_img *= 255
-            pred_img = pred_img.astype('int')
+            # pred_img = pred[i][:, :, ::-1]
+            # max_pred = np.max(pred_img)
+            # if not max_pred == 0:
+            #     pred_img = pred_img / max_pred
+            # pred_img *= 255
+            # pred_img = pred_img.astype('int')
 
-            max_ori = np.max(ori_img)
-            if not max_ori == 0:
-                ori_img = ori_img / max_ori
-            ori_img *= 255
-            ori_img = ori_img.astype('int')
+            # max_ori = np.max(ori_img)
+            # if not max_ori == 0:
+            #     ori_img = ori_img / max_ori
+            # ori_img *= 255
+            # ori_img = ori_img.astype('int')
 
             axs[0, i].imshow(ori_img)
             axs[1, i].imshow(pred_img)

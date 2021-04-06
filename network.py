@@ -52,6 +52,7 @@ def build_unet_model(batch_shape,
         mask = K.cast(mask, 'float32')
         length = K.sum(mask)
         mse = K.sum(K.square(gt - y_pred) * mask) / length
+        # mse = K.sum(K.abs(gt - y_pred) * mask) / length
         return mse
     
     input_batch = Input(shape=(*batch_shape, ch_num))

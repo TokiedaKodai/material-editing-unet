@@ -46,10 +46,10 @@ is_model_exist = args.exist
 is_load_min_train = args.min_train
 is_load_min_val = args.min_val
 
-# data_dir = cf.render_dir + '210324/exr/'
-data_dir = cf.render_dir + '210317/'
-# img_file = data_dir + 'img-%d-%s.exr'
-img_file = data_dir + 'img-%d-%s.png'
+data_dir = cf.render_dir + '210324/exr/'
+# data_dir = cf.render_dir + '210317/'
+img_file = data_dir + 'img-%d-%s.exr'
+# img_file = data_dir + 'img-%d-%s.png'
 model_dir = cf.model_dir + model_name + '/'
 save_dir = model_dir + 'save/'
 log_file = model_dir + cf.log_file
@@ -57,10 +57,12 @@ model_file = save_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 
 list_bsdf = cf.list_bsdf[:3]
-x_bsdf = list_bsdf[1:]
+list_bsdf = cf.list_bsdf[:2]
+x_bsdf = list_bsdf
 y_bsdf = list_bsdf[0]
 
 # Data Parameters
+patch_size = 512
 patch_size = 256
 # patch_size = 128
 patch_shape = (patch_size, patch_size)
@@ -69,10 +71,11 @@ img_size = 512
 ch_num = 3
 valid_rate = 0.05 # rate of valid pixels to add training patch
 valid_thre = 8 / 255 # threshold for valid pixel
-valid_thre = 8
+# valid_thre = 8
 
 # Training Parameters
 data_size = 400
+# data_size = 100
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
 dropout_rate = args.drop # Default 0.1
@@ -81,7 +84,7 @@ verbose = args.verbose # Default 1
 
 scaling = 1
 is_tonemap = True
-is_tonemap = False
+# is_tonemap = False
 
 # Augmentation
 is_aug = args.aug
@@ -121,8 +124,8 @@ def loadImg(idx_range):
         new_list = []
         list_valid = []
         for patch in list_patch:
-            # mask = patch[:, :, 0] > valid_thre
-            mask = patch[:, :, 3]
+            mask = patch[:, :, 0] > valid_thre
+            # mask = patch[:, :, 3]
             if np.sum(mask) > patch_size**2 * valid_rate:
                 new_list.append(patch)
                 list_valid.append(1)
@@ -230,16 +233,29 @@ def main():
                 validation_steps=len(x_val)*augment_rate / batch_size + 1,
                 verbose=verbose)
     else:
+        x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, 
+                                                        test_size=val_rate, shuffle=False)
         model.fit(
-                x_data,
-                y_data,
+                x_train,
+                y_train,
                 epochs=epoch,
                 batch_size=batch_size,
                 initial_epoch=init_epoch,
                 shuffle=True,
-                validation_split=val_rate,
+                validation_data=(x_val, y_val),
                 callbacks=[model_save_cb, csv_logger_cb],
                 verbose=verbose)
+
+        # model.fit(
+        #         x_data,
+        #         y_data,
+        #         epochs=epoch,
+        #         batch_size=batch_size,
+        #         initial_epoch=init_epoch,
+        #         shuffle=True,
+        #         validation_split=val_rate,
+        #         callbacks=[model_save_cb, csv_logger_cb],
+        #         verbose=verbose)
 
     model.save_weights(model_final)
 
