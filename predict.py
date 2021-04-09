@@ -69,6 +69,7 @@ is_tonemap = True
 # idx_range = range(400, 500)
 idx_range = list(range(100))
 # idx_range.extend(list(range(400, 500)))
+idx_range = list(range(2))
 
 is_load_min_val = True
 is_load_min_val = False
@@ -138,13 +139,13 @@ def main():
         # pred = pred.astype('int')
         # x_test = np.array(x_test, dtype='int')
 
-        fig, axs = plt.subplots(2, 4, figsize=(15, 10))
-        for i in range(4):
+        fig, axs = plt.subplots(2, len(x_bsdf), figsize=(15, 10))
+        for i in range(len(x_bsdf)):
             # ori_img = x_test[i][:, :, ::-1]
             # pred_img = pred[i][:, :, ::-1]
             ori_img = x_test[i]
             pred_img = pred[i]
-            pred_img *= mask
+            # pred_img *= mask
 
             # ori_img = x_test[i]
             # pred_img = pred[i]

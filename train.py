@@ -60,22 +60,24 @@ list_bsdf = cf.list_bsdf[:3]
 list_bsdf = cf.list_bsdf[:2]
 x_bsdf = list_bsdf
 y_bsdf = list_bsdf[0]
+print(list_bsdf)
 
 # Data Parameters
 patch_size = 512
-patch_size = 256
+# patch_size = 256
 # patch_size = 128
 patch_shape = (patch_size, patch_size)
 patch_tl = (0, 0)
 img_size = 512
 ch_num = 3
 valid_rate = 0.05 # rate of valid pixels to add training patch
-valid_thre = 8 / 255 # threshold for valid pixel
+valid_thre = 32 / 255 # threshold for valid pixel
 # valid_thre = 8
+# valid_thre = 0
 
 # Training Parameters
 data_size = 400
-# data_size = 100
+data_size = 2
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
 dropout_rate = args.drop # Default 0.1
@@ -101,10 +103,14 @@ if is_aug:
                         )
     x_datagen = ImageDataGenerator(**datagen_args)
     y_datagen = ImageDataGenerator(**datagen_args)
+    x_datagen = ImageDataGenerator()
+    y_datagen = ImageDataGenerator()
     x_val_datagen = ImageDataGenerator()
     y_val_datagen = ImageDataGenerator()
     seed_train = 1
     seed_val = 2
+
+check_valid = []
 
 def loadImg(idx_range):
     def clipPatch(img):
@@ -124,7 +130,8 @@ def loadImg(idx_range):
         new_list = []
         list_valid = []
         for patch in list_patch:
-            mask = patch[:, :, 0] > valid_thre
+            # mask = patch[:, :, 0] > valid_thre
+            mask = patch[:, :] > valid_thre
             # mask = patch[:, :, 3]
             if np.sum(mask) > patch_size**2 * valid_rate:
                 new_list.append(patch)
@@ -143,17 +150,19 @@ def loadImg(idx_range):
             y_img = y_img[:, :, ::-1]
             y_img = tools.tonemap_exr(y_img)
             y_img = np.nan_to_num(y_img)
+            # y_img = y_img[:, :, 0].reshape((img_size, img_size, 1))
         # max_val = np.max(y_img)
         # print('{}: {}, {}'.format(idx, max_val, np.min(y_img)))
         # print(y_img)
         # if not max_val == 0:
         #     y_img /= max_val
 
-        mask = y_img[:, :, 0] > valid_thre
-        y_img = np.dstack([y_img, mask, mask, mask])
+        # mask = y_img[:, :, 0] > valid_thre
+        # y_img = np.dstack([y_img, mask, mask, mask])
 
         y_patches = clipPatch(y_img)
         _, valids = selectValidPatch(y_patches)
+        check_valid.append(valids)
         
         for bsdf in x_bsdf:
             x_img = cv2.imread(img_file%(idx, bsdf), -1)
@@ -161,6 +170,7 @@ def loadImg(idx_range):
                 x_img = x_img[:, :, ::-1]
                 x_img = tools.tonemap_exr(x_img)
                 x_img = np.nan_to_num(x_img)
+                # x_img = x_img[:, :, 0].reshape((img_size, img_size, 1))
             # if not max_val == 0:
             #     x_img /= max_val
             x_patches = clipPatch(x_img)
@@ -170,6 +180,7 @@ def loadImg(idx_range):
                     x_data.append(x_patches[i])
                     y_data.append(y_patches[i])
 
+    # print(check_valid)
     return np.array(x_data), np.array(y_data)
 
 def main():
@@ -188,6 +199,7 @@ def main():
 
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(save_dir, exist_ok=True)
+
     model = network.build_unet_model(
         patch_shape,
         ch_num,
@@ -208,7 +220,7 @@ def main():
     if is_aug:
         print('data augmentation')
         x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, 
-                                                        test_size=val_rate, shuffle=True)
+                                                        test_size=val_rate, shuffle=False)
         x_datagen.fit(x_train, augment=True, seed=seed_train)
         y_datagen.fit(y_train, augment=True, seed=seed_train)
         x_val_datagen.fit(x_val, augment=True, seed=seed_val)
@@ -233,29 +245,29 @@ def main():
                 validation_steps=len(x_val)*augment_rate / batch_size + 1,
                 verbose=verbose)
     else:
-        x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, 
-                                                        test_size=val_rate, shuffle=False)
-        model.fit(
-                x_train,
-                y_train,
-                epochs=epoch,
-                batch_size=batch_size,
-                initial_epoch=init_epoch,
-                shuffle=True,
-                validation_data=(x_val, y_val),
-                callbacks=[model_save_cb, csv_logger_cb],
-                verbose=verbose)
-
+        # x_train, x_val, y_train, y_val = train_test_split(x_data, y_data, 
+        #                                                 test_size=val_rate, shuffle=False)
         # model.fit(
-        #         x_data,
-        #         y_data,
+        #         x_train,
+        #         y_train,
         #         epochs=epoch,
         #         batch_size=batch_size,
         #         initial_epoch=init_epoch,
         #         shuffle=True,
-        #         validation_split=val_rate,
+        #         validation_data=(x_val, y_val),
         #         callbacks=[model_save_cb, csv_logger_cb],
         #         verbose=verbose)
+
+        model.fit(
+                x_data,
+                y_data,
+                epochs=epoch,
+                batch_size=batch_size,
+                initial_epoch=init_epoch,
+                shuffle=True,
+                validation_split=val_rate,
+                callbacks=[model_save_cb, csv_logger_cb],
+                verbose=verbose)
 
     model.save_weights(model_final)
 

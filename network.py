@@ -20,7 +20,7 @@ def build_unet_model(batch_shape,
         def base_block(x):
             x = BatchNormalization()(x)
             x = Activation('relu')(x)
-            x = Dropout(rate=drop_rate)(x)
+            # x = Dropout(rate=drop_rate)(x)
             x = Conv2D(ch, (3, 3), padding='same')(x)
             return x
         
@@ -33,7 +33,7 @@ def build_unet_model(batch_shape,
         def base_block(x):
             x = BatchNormalization()(x)
             x = Activation('relu')(x)
-            x = Dropout(rate=drop_rate)(x)
+            # x = Dropout(rate=drop_rate)(x)
             x = Conv2DTranspose(ch, (3, 3), padding='same')(x)
             return x
         
@@ -77,7 +77,7 @@ def build_unet_model(batch_shape,
     # d0 = Conv2D(2, (1, 1), padding='same')(d0)
     # output_batch = Activation('tanh')(d0)
     # output_batch = Conv2D(2, (1, 1), padding='same')(d0)
-    output_batch = Conv2D(3, (1, 1), padding='same')(d0)
+    output_batch = Conv2D(ch_num, (1, 1), padding='same')(d0)
 
     model = Model(input_batch, output_batch)
 
@@ -95,8 +95,8 @@ def build_unet_model(batch_shape,
                 # optimizer='adam',
                 optimizer=adam,
                 metrics=['accuracy'],
-                # loss='mean_squared_error'
+                loss='mean_squared_error'
                 # loss='mean_absolute_error'
-                loss=mean_squared_error_masked
+                # loss=mean_squared_error_masked
                 )
     return model
