@@ -76,7 +76,7 @@ valid_thre = 32 / 255 # threshold for valid pixel
 # valid_thre = 0
 
 # Training Parameters
-data_size = 400
+data_size = 40
 data_size = 2
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
@@ -200,12 +200,22 @@ def main():
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(save_dir, exist_ok=True)
 
-    model = network.build_unet_model(
+    # model = network.build_unet_model(
+    #     patch_shape,
+    #     ch_num,
+    #     drop_rate=dropout_rate,
+    #     lr=learning_rate
+    #     )
+    model = network.build_unet_percuptual_model(
         patch_shape,
         ch_num,
         drop_rate=dropout_rate,
         lr=learning_rate
         )
+    loss_model = network.build_loss_model(patch_shape, ch_num)
+    # model.summary()
+    
+
     model_save_cb = ModelCheckpoint(save_dir + 'model-{epoch:04d}.hdf5',
                                     period=1,
                                     save_weights_only=True)
@@ -216,6 +226,8 @@ def main():
 
     x_data, y_data = loadImg(range(data_size))
     print('Training data size: ', len(x_data))
+    print('X: ', x_data.shape)
+    print('Y: ', y_data.shape)
 
     if is_aug:
         print('data augmentation')
@@ -258,9 +270,11 @@ def main():
         #         callbacks=[model_save_cb, csv_logger_cb],
         #         verbose=verbose)
 
+        # Perceptual Loss
+        y_loss_model = loss_model.predict(y_data)
         model.fit(
                 x_data,
-                y_data,
+                y_loss_model,
                 epochs=epoch,
                 batch_size=batch_size,
                 initial_epoch=init_epoch,

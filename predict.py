@@ -16,6 +16,7 @@ import argparse
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import Sequence
 from keras.callbacks import CSVLogger, ModelCheckpoint, ReduceLROnPlateau
+from keras.models import Model
 from sklearn.model_selection import train_test_split
 
 import network
@@ -25,7 +26,7 @@ import tools
 # Parser
 parser = argparse.ArgumentParser()
 parser.add_argument('name', help='model name to use training and test')
-parser.add_argument('epoch', help='end epoch num')
+parser.add_argument('epoch', type=int, help='end epoch num')
 parser.add_argument('--pred_str', default=None, help='add string to predict folder')
 args = parser.parse_args()
 
@@ -47,7 +48,7 @@ model_file = save_dir + '/model-%04d.hdf5'
 model_final = model_dir + cf.model_final
 out_dir = cf.result_dir + model_name + '/'
 
-pred_dir = out_dir + 'pred-%s'%epoch
+pred_dir = out_dir + 'pred-%d'%epoch
 if not pred_str is None:
     pred_dir += '-' + pred_str
 pred_dir += '/'
@@ -75,6 +76,8 @@ is_load_min_val = True
 is_load_min_val = False
 is_load_min_train = True
 is_load_min_train = False
+is_load_final = True
+is_load_final = False
 
 def rmse(img1, img2):
     return np.sqrt(np.sum(np.square(img1 - img2)))
@@ -99,15 +102,22 @@ def main():
 
     df_log = pd.read_csv(log_file)
     end_point = int(df_log.tail(1).index.values) + 1
-    load_epoch = end_point
+    load_epoch = epoch
     if is_load_min_val:
         df_loss = df_log['val_loss']
         load_epoch = df_loss.idxmin() + 1
     elif is_load_min_train:
         df_loss = df_log['loss']
         load_epoch = df_loss.idxmin() + 1
+    elif is_load_final:
+        load_epoch = end_point
 
-    model = network.build_unet_model(img_shape, ch_num)
+    # model = network.build_unet_model(img_shape, ch_num)
+    model = network.build_unet_percuptual_model(img_shape, ch_num)
+    # model.summary()
+    # print(len(model.layers))
+    pred_model = Model(model.input, model.layers[58].output)
+
     # model.load_weights(model_final)
     model.load_weights(model_file%load_epoch)
 
@@ -130,7 +140,8 @@ def main():
         mask = y_test[:, :, 0] > valid_thre
         mask = np.dstack([mask, mask, mask]).astype('float32')
             
-        pred = model.predict(np.array(x_test), batch_size=len(x_bsdf))
+        # pred = model.predict(np.array(x_test), batch_size=len(x_bsdf))
+        pred = pred_model.predict(np.array(x_test), batch_size=len(x_bsdf))
 
         for i, bsdf in enumerate(x_bsdf):
             results = evaluate(pred[i], y_test)
