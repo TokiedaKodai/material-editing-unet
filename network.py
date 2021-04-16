@@ -7,7 +7,8 @@ from keras import optimizers
 from keras.applications.vgg16 import VGG16
 
 is_batch_norm = True
-is_drop_out = True
+is_dropout = True
+# is_dropout = False
 
 ''' U-Net '''
 def build_unet_model(batch_shape,
@@ -106,12 +107,23 @@ def build_unet_model(batch_shape,
 
 # Loss Model using Pre-trained VGG-16
 def build_loss_model(batch_shape, ch_num):
-    vgg_model = VGG16(weights='imagenet', include_top=False, input_shape=(*batch_shape, ch_num))
+    input_batch = Input(shape=(*batch_shape, ch_num))
+    output_input = Activation('relu')(input_batch)
+
+    vgg_model = VGG16(weights='imagenet', 
+                    include_top=False, 
+                    input_tensor=input_batch,
+                    input_shape=(*batch_shape, ch_num))
     vgg_model.trainable = False
+
     selected_layers = [1,2,9,10,17,18]
     selected_outputs = [vgg_model.layers[i].output for i in selected_layers]
-    # selected_outputs.append(model.inputs)
-    loss_model = Model(vgg_model.input, selected_outputs)
+    # print(selected_outputs)
+    # selected_outputs.append(vgg_model.input)
+    selected_outputs.append(output_input)
+    # print(selected_outputs)
+    # loss_model = Model(vgg_model.input, selected_outputs)
+    loss_model = Model(input_batch, selected_outputs)
     # loss_model = Model(vgg_model.input, vgg_model.output)
     # loss_model_outputs = loss_model(model.output)
     for layer in loss_model.layers:
@@ -133,7 +145,8 @@ def build_unet_percuptual_model(
         def base_block(x):
             x = BatchNormalization()(x)
             x = Activation('relu')(x)
-            # x = Dropout(rate=drop_rate)(x)
+            if is_dropout:
+                x = Dropout(rate=drop_rate)(x)
             x = Conv2D(ch, (3, 3), padding='same')(x)
             return x
         
@@ -146,7 +159,8 @@ def build_unet_percuptual_model(
         def base_block(x):
             x = BatchNormalization()(x)
             x = Activation('relu')(x)
-            # x = Dropout(rate=drop_rate)(x)
+            if is_dropout:
+                x = Dropout(rate=drop_rate)(x)
             x = Conv2DTranspose(ch, (3, 3), padding='same')(x)
             return x
         

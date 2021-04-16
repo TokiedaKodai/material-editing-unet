@@ -76,8 +76,9 @@ valid_thre = 32 / 255 # threshold for valid pixel
 # valid_thre = 0
 
 # Training Parameters
-data_size = 40
-data_size = 2
+data_size = 400
+data_size = 50
+# data_size = 2
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
 dropout_rate = args.drop # Default 0.1

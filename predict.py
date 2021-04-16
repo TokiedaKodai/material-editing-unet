@@ -27,7 +27,7 @@ import tools
 parser = argparse.ArgumentParser()
 parser.add_argument('name', help='model name to use training and test')
 parser.add_argument('epoch', type=int, help='end epoch num')
-parser.add_argument('--pred_str', default=None, help='add string to predict folder')
+parser.add_argument('--folder', default=None, help='add string to predict folder')
 args = parser.parse_args()
 
 print(args)
@@ -35,7 +35,7 @@ print(args)
 # Model Parameters
 model_name = args.name
 epoch = args.epoch
-pred_str = args.pred_str
+pred_str = args.folder
 
 data_dir = cf.render_dir + '210324/exr/'
 # data_dir = cf.render_dir + '210317/'
@@ -69,15 +69,18 @@ is_tonemap = True
 
 # idx_range = range(400, 500)
 idx_range = list(range(100))
-# idx_range.extend(list(range(400, 500)))
-idx_range = list(range(2))
+idx_range.extend(list(range(400, 500)))
+# idx_range = list(range(2))
 
 is_load_min_val = True
-is_load_min_val = False
+# is_load_min_val = False
 is_load_min_train = True
 is_load_min_train = False
 is_load_final = True
 is_load_final = False
+
+is_dropout = True
+# is_dropout = False
 
 def rmse(img1, img2):
     return np.sqrt(np.sum(np.square(img1 - img2)))
@@ -116,7 +119,10 @@ def main():
     model = network.build_unet_percuptual_model(img_shape, ch_num)
     # model.summary()
     # print(len(model.layers))
-    pred_model = Model(model.input, model.layers[58].output)
+    if is_dropout:
+        pred_model = Model(model.input, model.layers[72].output) # with dropout
+    else:
+        pred_model = Model(model.input, model.layers[58].output) # without dropout
 
     # model.load_weights(model_final)
     model.load_weights(model_file%load_epoch)
@@ -156,19 +162,23 @@ def main():
             # pred_img = pred[i][:, :, ::-1]
             ori_img = x_test[i]
             pred_img = pred[i]
-            # pred_img *= mask
+            pred_img *= mask
 
             # ori_img = x_test[i]
             # pred_img = pred[i]
             # ori_img = tools.tonemap(ori_img)
             # pred_img = tools.tonemap(pred_img)
 
-            # pred_img = tools.tonemap_exr(pred_img)
+            pred_img = tools.tonemap_exr(pred_img)
+            pred_img *= mask
+
             # length = np.sum(mask)
             # if not length == 0:
             #     mean_diffuse = np.sum(ori_img * mask) / length
             #     mean_pred = np.sum(pred_img * mask) / length
             #     pred_img = (pred_img / mean_pred) * mean_diffuse
+
+            # pred_img *= mask
 
             ori_img = tools.exr2png(ori_img)
             pred_img = tools.exr2png(pred_img)
