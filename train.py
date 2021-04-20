@@ -77,7 +77,8 @@ valid_thre = 32 / 255 # threshold for valid pixel
 
 # Training Parameters
 data_size = 400
-data_size = 50
+data_size = 100
+# data_size = 50
 # data_size = 2
 batch_size = args.batch # Default 4
 learning_rate = args.lr # Default 0.001
@@ -184,6 +185,24 @@ def loadImg(idx_range):
     # print(check_valid)
     return np.array(x_data), np.array(y_data)
 
+# Batch Generator
+class BatchGenerator(Sequence):
+    def __init__(self, dir_name, data_num):
+        self.batches_per_epoch = data_num
+        self.input_dir = dir_name + '/in'
+        self.gt_dir = dir_name + '/gt'
+
+    def __getitem__(self, idx):
+        input_batch = np.load(self.input_dir + '/{:05d}.npy'.format(idx))
+        gt_batch = np.load(self.gt_dir + '/{:05d}.npy'.format(idx))
+        return input_batch, gt_batch
+
+    def __len__(self):
+        return self.batches_per_epoch
+
+    def on_epoch_end(self):
+        pass
+
 def main():
     init_epoch = 0
     if is_model_exist:
@@ -285,6 +304,12 @@ def main():
                 verbose=verbose)
 
     model.save_weights(model_final)
+
+    # plot loss graph
+    df = pd.read_csv(log_file)
+    loss_dir = model_dir + 'loss/'
+    os.makedirs(loss_dir, exist_ok=True)
+    tools.plot_graph(df, save_dir=loss_dir, save_name='loss_{}.png'.format(epoch))
 
 if __name__ == "__main__":
     main()
