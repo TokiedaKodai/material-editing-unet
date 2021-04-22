@@ -117,6 +117,7 @@ def build_loss_model(batch_shape, ch_num):
     vgg_model.trainable = False
 
     selected_layers = [1,2,9,10,17,18]
+    selected_layers = [2,10,18]
     selected_outputs = [vgg_model.layers[i].output for i in selected_layers]
     # print(selected_outputs)
     # selected_outputs.append(vgg_model.input)
@@ -204,7 +205,7 @@ def build_unet_percuptual_model(
     loss_model = build_loss_model(batch_shape, ch_num)
     loss_model_outputs = loss_model(model.output)
 
-    full_model = Model(model.inputs, loss_model_outputs)
+    full_model = Model(model.input, loss_model_outputs)
 
     def perceptual_loss(y_true, y_pred):
         # print('y_true: ', y_true)

@@ -10,6 +10,7 @@ import argparse
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils import Sequence
 from keras.callbacks import CSVLogger, ModelCheckpoint, ReduceLROnPlateau
+import keras.backend as K
 from sklearn.model_selection import train_test_split
 
 import network
@@ -77,10 +78,10 @@ valid_thre = 32 / 255 # threshold for valid pixel
 
 # Training Parameters
 data_size = 400
-data_size = 100
+# data_size = 100
 # data_size = 50
 # data_size = 2
-batch_size = args.batch # Default 4
+batch_size = args.batch # Default 16
 learning_rate = args.lr # Default 0.001
 dropout_rate = args.drop # Default 0.1
 val_rate = args.val # Default 0.3
@@ -220,6 +221,19 @@ def main():
     os.makedirs(model_dir, exist_ok=True)
     os.makedirs(save_dir, exist_ok=True)
 
+    # Load Data
+    x_data, y_data = loadImg(range(data_size))
+    print('Training data size: ', len(x_data))
+    print('X: ', x_data.shape)
+    print('Y: ', y_data.shape)
+
+    # Generate GT for Perceptual Loss
+    loss_model = network.build_loss_model(patch_shape, ch_num)
+    y_feature = loss_model.predict(y_data, batch_size=batch_size)
+
+    # Clear Memory
+    K.clear_session()
+
     # model = network.build_unet_model(
     #     patch_shape,
     #     ch_num,
@@ -232,8 +246,6 @@ def main():
         drop_rate=dropout_rate,
         lr=learning_rate
         )
-    loss_model = network.build_loss_model(patch_shape, ch_num)
-    # model.summary()
     
 
     model_save_cb = ModelCheckpoint(save_dir + 'model-{epoch:04d}.hdf5',
@@ -244,10 +256,7 @@ def main():
     if is_model_exist:
         model.load_weights(model_file%load_epoch)
 
-    x_data, y_data = loadImg(range(data_size))
-    print('Training data size: ', len(x_data))
-    print('X: ', x_data.shape)
-    print('Y: ', y_data.shape)
+    
 
     if is_aug:
         print('data augmentation')
@@ -291,10 +300,9 @@ def main():
         #         verbose=verbose)
 
         # Perceptual Loss
-        y_loss_model = loss_model.predict(y_data)
         model.fit(
                 x_data,
-                y_loss_model,
+                y_feature,
                 epochs=epoch,
                 batch_size=batch_size,
                 initial_epoch=init_epoch,

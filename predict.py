@@ -50,7 +50,7 @@ out_dir = cf.result_dir + model_name + '/'
 
 pred_dir = out_dir + 'pred-%d'%epoch
 if not pred_str is None:
-    pred_dir += '-' + pred_str
+    pred_dir += '_' + pred_str
 pred_dir += '/'
 
 list_bsdf = cf.list_bsdf[:4]
@@ -71,9 +71,11 @@ is_tonemap = True
 idx_range = list(range(100))
 idx_range.extend(list(range(400, 500)))
 # idx_range = list(range(2))
+idx_range = list(range(50))
+idx_range.extend(list(range(450, 500)))
 
 is_load_min_val = True
-# is_load_min_val = False
+is_load_min_val = False
 is_load_min_train = True
 is_load_min_train = False
 is_load_final = True

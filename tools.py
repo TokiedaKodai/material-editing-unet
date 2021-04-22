@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 from subprocess import call
 import pathlib
 
@@ -57,6 +58,20 @@ def tonemap_exr(img, gamma=2.2):
 def exr2png(img):
     return np.clip(img*255, 0, 255).astype('uint8')
     
+def plot_graph(df, save_dir, save_name):
+    epoch = df['epoch'].values
+    train = df['loss'].values
+    validation = df['val_loss'].values
+
+    mean = np.mean(train)
+
+    plt.figure()
+    plt.plot(epoch, train)
+    plt.plot(epoch, validation)
+    plt.ylim(0, mean * 2)
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.savefig(save_dir + save_name)
 
 if __name__ == "__main__":
     
