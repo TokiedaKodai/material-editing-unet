@@ -10,7 +10,9 @@ is_batch_norm = True
 is_dropout = True
 # is_dropout = False
 
-''' U-Net '''
+lumi_scale_range = [0.5, 1.5]
+
+''' ################ U-Net ################ '''
 def build_unet_model(batch_shape,
                     ch_num,
                     drop_rate=0.1,
@@ -105,7 +107,8 @@ def build_unet_model(batch_shape,
                 )
     return model
 
-# Loss Model using Pre-trained VGG-16
+''' ################ Perceptual ################ '''
+################ Loss Model using Pre-trained VGG-16 ################
 def build_loss_model(batch_shape, ch_num):
     input_batch = Input(shape=(*batch_shape, ch_num))
     output_input = Activation('relu')(input_batch)
@@ -133,14 +136,15 @@ def build_loss_model(batch_shape, ch_num):
     # print('loss model buit')
     return loss_model
 
-# U-net with Perceptual Loss using Pre-trained VGG-16
+################ U-net with Perceptual Loss using Pre-trained VGG-16 ################
 def build_unet_percuptual_model(
                     batch_shape,
                     ch_num,
                     drop_rate=0.1,
                     transfer_learn=False,
                     transfer_encoder=False,
-                    lr=0.001
+                    lr=0.001,
+                    aug_lumi=False
                     ):
     def encode_block(x, ch):
         def base_block(x):
@@ -175,6 +179,8 @@ def build_unet_percuptual_model(
 
     
     input_batch = Input(shape=(*batch_shape, ch_num))
+    if aug_lumi:
+        input_batch *= random.uniform(lumi_scale_range[0], lumi_scale_range[1])
     e0 = Conv2D(8, (1, 1), padding='same')(input_batch)
     e0 = Activation('relu')(e0)
 
