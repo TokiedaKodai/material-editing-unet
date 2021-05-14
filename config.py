@@ -31,8 +31,8 @@ np_data = {
     'val': 57
 }
 
-list_bsdf = list_bsdf[:2]
-x_bsdf = list_bsdf
+list_bsdf = list_bsdf
+x_bsdf = list_bsdf[:2]
 y_bsdf = list_bsdf[0]
 
 #### Training Parameters
@@ -44,3 +44,7 @@ ch_num = 3
 valid_rate = 0.05 # rate of valid pixels to add training patch
 valid_thre = 32 / 255 # threshold for valid pixel
 is_tonemap = True
+is_gray = True
+is_gray = False
+if is_gray:
+    ch_num = 1

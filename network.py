@@ -5,6 +5,7 @@ from keras.models import Model
 import keras.backend as K
 from keras import optimizers
 from keras.applications.vgg16 import VGG16
+import random
 
 is_batch_norm = True
 is_dropout = True
@@ -144,7 +145,8 @@ def build_unet_percuptual_model(
                     transfer_learn=False,
                     transfer_encoder=False,
                     lr=0.001,
-                    aug_lumi=False
+                    aug_lumi=False,
+                    style_intensity=0.05
                     ):
     def encode_block(x, ch):
         def base_block(x):
@@ -214,25 +216,11 @@ def build_unet_percuptual_model(
     full_model = Model(model.input, loss_model_outputs)
 
     def perceptual_loss(y_true, y_pred):
-        # print('y_true: ', y_true)
-        # print('y_pred: ', y_pred)
-        vgg_model = VGG16(weights='imagenet', include_top=False, input_shape=(*batch_shape, ch_num))
-        vgg_model.trainable = False
-        selected_layers = [1,2,9,10,17,18]
-        selected_outputs = [vgg_model.layers[i].output for i in selected_layers]
-        # selected_outputs.append(model.inputs)
-        loss_model = Model(vgg_model.input, selected_outputs)
-        loss_model_outputs = loss_model(model.output)
-        loss_model.compile(optimizer='adam', loss='mse')   
-        print('loss model buit')
-
-        f_true = loss_model.predict(y_true)
-        f_pred = loss_model.predict(y_pred)
-        loss = K.mean(K.square(y_true - y_pred)) #+ K.mean(K.square(f_true - f_pred))
+        # print(K.int_shape(y_pred))
+        loss = K.mean(K.square(y_true - y_pred))
+        if K.int_shape(y_pred)[3] != 3:
+            loss *= style_intensity
         return loss
-
-    # full_model = Model(model.inputs, loss_model.outputs)
-
 
     # Transfer Learning
     if transfer_learn:
@@ -248,9 +236,9 @@ def build_unet_percuptual_model(
                 # optimizer='adam',
                 optimizer=adam,
                 metrics=['accuracy'],
-                loss='mean_squared_error'
+                # loss='mean_squared_error'
                 # loss='mean_absolute_error'
                 # loss=mean_squared_error_masked
-                # loss=perceptual_loss
+                loss=perceptual_loss
                 )
     return full_model

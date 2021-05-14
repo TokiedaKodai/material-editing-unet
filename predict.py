@@ -53,9 +53,9 @@ if not pred_str is None:
     pred_dir += '_' + pred_str
 pred_dir += '/'
 
-list_bsdf = cf.list_bsdf[:4]
-x_bsdf = list_bsdf
-y_bsdf = list_bsdf[0]
+list_bsdf = cf.list_bsdf
+x_bsdf = cf.x_bsdf
+y_bsdf = cf.y_bsdf
 
 
 patch_tl = (0, 0)
@@ -70,9 +70,11 @@ is_tonemap = True
 # idx_range = range(400, 500)
 idx_range = list(range(100))
 idx_range.extend(list(range(400, 500)))
-# idx_range = list(range(2))
+
 idx_range = list(range(50))
 idx_range.extend(list(range(450, 500)))
+
+idx_range = list(range(2))
 
 is_load_min_val = True
 is_load_min_val = False
@@ -171,8 +173,8 @@ def main():
             # ori_img = tools.tonemap(ori_img)
             # pred_img = tools.tonemap(pred_img)
 
-            pred_img = tools.tonemap_exr(pred_img)
-            pred_img *= mask
+            # pred_img = tools.tonemap_exr(pred_img)
+            # pred_img *= mask
 
             # length = np.sum(mask)
             # if not length == 0:

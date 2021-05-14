@@ -1,8 +1,19 @@
-import numpy as np
+import cv2
+import shutil
 
-arr = np.load('../render/210324/np/test/train/y-0.npy', allow_pickle=True)
-print(arr.shape)
-print(arr[0].shape)
-print(arr[1].shape)
-print(arr[2].shape)
-print(arr[3].shape)
+import tools
+import config as cf
+
+data_dir = cf.render_dir + '210324/'
+in_file = data_dir + 'png/img-%d-%s.png'
+out_A = data_dir + 'testA/img-%d-%s.png'
+out_B = data_dir + 'testB/img-%d-%s.png'
+bsdf_A = ['diffuse']
+bsdf_B = ['plastic']
+
+# for idx in range(400, 500):
+#     for bsdf in bsdf_A:
+#         shutil.copy(in_file%(idx, bsdf), out_A%(idx, bsdf))
+#     for bsdf in bsdf_B:
+#         shutil.copy(in_file%(idx, bsdf), out_B%(idx, bsdf))
+

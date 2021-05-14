@@ -61,7 +61,7 @@ print('BSDF X', x_bsdf)
 print('BSDF Y', y_bsdf)
 
 use_generator = True
-# use_generator = False
+use_generator = False
 train_dir = np_dir + np_data['name'] + '/' + np_train_dir
 val_dir = np_dir + np_data['name'] + '/' + np_val_dir
 train_size = np_data['train']
@@ -76,7 +76,7 @@ model_file = save_dir + cf.model_file
 
 # Training Parameters
 data_size = 400
-# data_size = 100
+data_size = 100
 # data_size = 50
 data_size = 2
 batch_size = args.batch # Default 16

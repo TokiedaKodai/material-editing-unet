@@ -137,6 +137,9 @@ def loadImg(idx_range):
         # mask = y_img[:, :, 0] > valid_thre
         # y_img = np.dstack([y_img, mask, mask, mask])
 
+        if cf.is_gray:
+            y_img = cv2.cvtColor(y_img, cv2.COLOR_BGR2GRAY)
+
         y_patches = clipPatch(y_img)
         _, valids = selectValidPatch(y_patches)
         
@@ -149,6 +152,10 @@ def loadImg(idx_range):
                 # x_img = x_img[:, :, 0].reshape((img_size, img_size, 1))
             # if not max_val == 0:
             #     x_img /= max_val
+
+            if cf.is_gray:
+                x_img = cv2.cvtColor(x_img, cv2.COLOR_BGR2GRAY)
+
             x_patches = clipPatch(x_img)
 
             for i, is_valid in enumerate(valids):
